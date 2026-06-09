@@ -10,7 +10,6 @@ const IntroSection = () => {
 
   return (
     <section className="relative py-20 md:py-32 px-4 overflow-hidden min-h-[80vh] md:min-h-[90vh] flex items-center">
-      {/* Background orbs */}
       <div className="absolute rounded-full blur-3xl pointer-events-none" style={{ width: 480, height: 480, top: 40, left: 20, opacity: 0.12, background: 'hsl(204 82% 58%)', animation: 'ce-orb1 14s ease-in-out infinite alternate' }} />
       <div className="absolute rounded-full blur-3xl pointer-events-none" style={{ width: 380, height: 380, bottom: 40, right: 20, opacity: 0.08, background: 'hsl(168 50% 56%)', animation: 'ce-orb2 18s ease-in-out infinite alternate' }} />
 
@@ -27,10 +26,7 @@ const IntroSection = () => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.4, delay: 0.15 }}
             className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border"
-            style={{
-              background: 'hsl(204 82% 58% / 0.08)',
-              borderColor: 'hsl(204 82% 58% / 0.20)',
-            }}
+            style={{ background: 'hsl(204 82% 58% / 0.08)', borderColor: 'hsl(204 82% 58% / 0.20)' }}
           >
             <Sparkles className="w-3 h-3" style={{ color: 'hsl(204, 82%, 62%)' }} />
             <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'hsl(204, 82%, 62%)' }}>
@@ -39,7 +35,7 @@ const IntroSection = () => {
             <Code2 className="w-3 h-3" style={{ color: 'hsl(168, 50%, 56%)' }} />
           </motion.div>
 
-          {/* Main heading — light weight, tight tracking, professional */}
+          {/* Heading — fontWeight 300 partout, taille proportionnelle */}
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -56,8 +52,7 @@ const IntroSection = () => {
               color: 'transparent',
             }}
           >
-            Building Digital<br />
-            <span style={{ fontWeight: 600 }}>Experiences</span>
+            Building Digital<br />Experiences
           </motion.h1>
 
           {/* Description */}
@@ -98,18 +93,7 @@ const IntroSection = () => {
                 transition={{ delay: 0.75 + index * 0.08 }}
                 className="glass rounded-xl px-5 py-3 cursor-default"
               >
-                <div
-                  style={{
-                    fontSize: '1.5rem',
-                    fontWeight: 600,
-                    letterSpacing: '-0.02em',
-                    background: 'linear-gradient(135deg, hsl(204, 82%, 58%), hsl(168, 50%, 56%))',
-                    WebkitBackgroundClip: 'text',
-                    backgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    color: 'transparent',
-                  }}
-                >
+                <div style={{ fontSize: '1.5rem', fontWeight: 600, letterSpacing: '-0.02em', background: 'linear-gradient(135deg, hsl(204, 82%, 58%), hsl(168, 50%, 56%))', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent', color: 'transparent' }}>
                   {stat.value}
                 </div>
                 <div style={{ fontSize: 11, color: 'hsl(210, 12%, 50%)', marginTop: 2, letterSpacing: '0.04em' }}>
