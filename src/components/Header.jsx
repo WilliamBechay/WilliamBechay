@@ -19,263 +19,151 @@ const Header = () => {
   const activeSection = useScrollSpy(sectionIds, { rootMargin: '-50% 0px -50% 0px' });
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleNavigate = (path) => {
-    navigate(path);
-    setIsMenuOpen(false);
-  };
-  
+  const handleNavigate = (path) => { navigate(path); setIsMenuOpen(false); };
+
   const scrollToSection = (sectionId) => {
     if (location.pathname !== '/') {
-        navigate('/');
-        setTimeout(() => {
-            const element = document.getElementById(sectionId);
-            if (element) {
-                element.scrollIntoView({ behavior: 'smooth' });
-                setIsMenuOpen(false);
-            }
-        }, 100);
+      navigate('/');
+      setTimeout(() => {
+        document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+        setIsMenuOpen(false);
+      }, 100);
     } else {
-        const element = document.getElementById(sectionId);
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
-            setIsMenuOpen(false);
-        }
+      document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+      setIsMenuOpen(false);
     }
   };
 
-  const handleToggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
+  const handleToggleTheme = () => setTheme(theme === 'dark' ? 'light' : 'dark');
+
+  const isActive = (pathOrId) => {
+    if (pathOrId.startsWith('/')) return location.pathname === pathOrId;
+    return location.pathname === '/' && activeSection === pathOrId;
   };
 
-  const getNavItemClass = (pathOrId) => {
-    const baseClass = "relative px-4 py-2 rounded-lg transition-all duration-300 font-medium";
-    let isActive = false;
-  
-    if (pathOrId.startsWith('/') && location.pathname === pathOrId) {
-        isActive = true;
-    }
-    
-    if (location.pathname === '/' && activeSection === pathOrId) {
-        isActive = true;
-    }
-  
-    if (isActive) {
-        return cn(baseClass, "text-primary bg-primary/10 shadow-lg shadow-primary/20");
-    } else {
-        return cn(baseClass, "text-muted-foreground hover:text-foreground hover:bg-secondary/50");
-    }
-  };
+  const navItemClass = (pathOrId) => cn(
+    'relative px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200',
+    isActive(pathOrId)
+      ? 'text-foreground bg-white/[0.06] border border-white/[0.08]'
+      : 'text-muted-foreground hover:text-foreground hover:bg-white/[0.04]'
+  );
+
+  const iconBtnClass = 'flex items-center justify-center w-7 h-7 rounded-md text-muted-foreground hover:text-foreground hover:bg-white/[0.05] transition-colors';
 
   if (!translations) return null;
 
   return (
-    <header className={cn(
-      "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
-      isScrolled 
-        ? "glass-strong shadow-2xl shadow-primary/5" 
-        : "bg-transparent"
-    )}>
-      <nav className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
-          {/* Logo with animated gradient */}
-          <Link to="/" className="cursor-pointer group">
-            <motion.h1
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-              className="text-2xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-gradient-x"
-            >
-              William Bechay
-            </motion.h1>
-          </Link>
+    <header
+      className={cn(
+        'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
+        isScrolled
+          ? 'bg-[#111318] border-b border-white/[0.07] shadow-[0_1px_0_rgba(255,255,255,0.05)]'
+          : 'bg-transparent'
+      )}
+    >
+      <nav className="container mx-auto px-4 h-14 flex items-center justify-between">
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-2">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => scrollToSection('projects')} 
-              className={getNavItemClass('projects')}
-            >
-              {translations.header.projects}
-            </motion.button>
-            
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => scrollToSection('skills')} 
-              className={getNavItemClass('skills')}
-            >
-              {translations.header.skills}
-            </motion.button>
-            
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => handleNavigate('/contact')} 
-              className={getNavItemClass('/contact')}
-            >
-              {translations.header.contact}
-            </motion.button>
-            
-            {/* Divider */}
-            <div className="w-px h-6 bg-border mx-2" />
-            
-            {/* Action buttons */}
-            <div className="flex items-center gap-1">
-              <motion.button
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={toggleLanguage}
-                className="p-2.5 rounded-lg hover:bg-gradient-to-r hover:from-primary/10 hover:to-accent/10 transition-all duration-300 group"
-                aria-label="Toggle language"
-              >
-                <Languages className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
-              </motion.button>
-              
-              <motion.button
-                whileHover={{ scale: 1.1, rotate: -15 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={handleToggleTheme}
-                className="p-2.5 rounded-lg hover:bg-gradient-to-r hover:from-primary/10 hover:to-accent/10 transition-all duration-300 group"
-                aria-label="Toggle theme"
-              >
-                <AnimatePresence mode="wait" initial={false}>
-                  <motion.div
-                    key={theme}
-                    initial={{ rotate: -180, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: 180, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    {theme === 'dark' ? (
-                      <Sun className="w-5 h-5 text-white" />
-                    ) : (
-                      <Moon className="w-5 h-5 text-primary" />
-                    )}
-                  </motion.div>
-                </AnimatePresence>
-              </motion.button>
-            </div>
-          </div>
+        {/* Logo */}
+        <Link to="/" className="group">
+          <motion.span
+            initial={{ opacity: 0, x: -16 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4 }}
+            className="text-sm font-semibold text-foreground/90 tracking-tight"
+          >
+            William Bechay
+          </motion.span>
+        </Link>
 
-          {/* Mobile Menu Button */}
-          <div className="flex md:hidden items-center gap-1">
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              onClick={toggleLanguage}
-              className="p-2 rounded-lg hover:bg-secondary/50 transition-colors duration-200"
-              aria-label="Toggle language"
-            >
-              <Languages className="w-5 h-5 text-muted-foreground" />
-            </motion.button>
-            
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              onClick={handleToggleTheme}
-              className="p-2 rounded-lg hover:bg-secondary/50 transition-colors duration-200"
-              aria-label="Toggle theme"
-            >
-              {theme === 'dark' ? (
-                <Sun className="w-5 h-5 text-white" />
-              ) : (
-                <Moon className="w-5 h-5 text-primary" />
-              )}
-            </motion.button>
-            
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2 rounded-lg hover:bg-secondary/50 transition-colors"
-              aria-label="Toggle menu"
-            >
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.div
-                  key={isMenuOpen ? 'close' : 'open'}
-                  initial={{ rotate: -90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: 90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-                </motion.div>
-              </AnimatePresence>
-            </motion.button>
-          </div>
+        {/* Desktop nav */}
+        <div className="hidden md:flex items-center gap-1">
+          <button onClick={() => scrollToSection('projects')} className={navItemClass('projects')}>
+            {translations.header.projects}
+          </button>
+          <button onClick={() => scrollToSection('skills')} className={navItemClass('skills')}>
+            {translations.header.skills}
+          </button>
+          <button onClick={() => handleNavigate('/contact')} className={navItemClass('/contact')}>
+            {translations.header.contact}
+          </button>
+
+          <div className="w-px h-4 bg-white/[0.08] mx-2" />
+
+          <button onClick={toggleLanguage} className={iconBtnClass} aria-label="Toggle language">
+            <Languages className="w-4 h-4" />
+          </button>
+          <button onClick={handleToggleTheme} className={iconBtnClass} aria-label="Toggle theme">
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={theme}
+                initial={{ rotate: -180, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: 180, opacity: 0 }}
+                transition={{ duration: 0.25 }}
+              >
+                {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              </motion.div>
+            </AnimatePresence>
+          </button>
         </div>
 
-        {/* Mobile Menu */}
-        <AnimatePresence>
-          {isMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-              className="md:hidden overflow-hidden"
-            >
-              <motion.div 
-                className="relative flex flex-col gap-2 pt-4 mt-4 border-t border-border/30 rounded-xl px-3 pb-3 overflow-hidden"
-                initial="hidden"
-                animate="show"
-                variants={{
-                  hidden: { opacity: 0 },
-                  show: {
-                    opacity: 1,
-                    transition: {
-                      staggerChildren: 0.1
-                    }
-                  }
-                }}
+        {/* Mobile controls */}
+        <div className="flex md:hidden items-center gap-1">
+          <button onClick={toggleLanguage} className={iconBtnClass} aria-label="Toggle language">
+            <Languages className="w-4 h-4" />
+          </button>
+          <button onClick={handleToggleTheme} className={iconBtnClass} aria-label="Toggle theme">
+            {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+          </button>
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className={iconBtnClass}
+            aria-label="Toggle menu"
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={isMenuOpen ? 'close' : 'open'}
+                initial={{ rotate: -90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: 90, opacity: 0 }}
+                transition={{ duration: 0.2 }}
               >
-                {/* Gradient background */}
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-accent/5 to-primary/10 backdrop-blur-xl -z-10" />
-                <div className="absolute inset-0 bg-card/80 backdrop-blur-xl -z-10" />
-                
-                <motion.button
-                  variants={{
-                    hidden: { x: -20, opacity: 0 },
-                    show: { x: 0, opacity: 1 }
-                  }}
-                  onClick={() => scrollToSection('projects')} 
-                  className={getNavItemClass('projects')}
-                >
-                  {translations.header.projects}
-                </motion.button>
-                
-                <motion.button
-                  variants={{
-                    hidden: { x: -20, opacity: 0 },
-                    show: { x: 0, opacity: 1 }
-                  }}
-                  onClick={() => scrollToSection('skills')} 
-                  className={getNavItemClass('skills')}
-                >
-                  {translations.header.skills}
-                </motion.button>
-                
-                <motion.button
-                  variants={{
-                    hidden: { x: -20, opacity: 0 },
-                    show: { x: 0, opacity: 1 }
-                  }}
-                  onClick={() => handleNavigate('/contact')} 
-                  className={getNavItemClass('/contact')}
-                >
-                  {translations.header.contact}
-                </motion.button>
+                {isMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
               </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            </AnimatePresence>
+          </button>
+        </div>
       </nav>
+
+      {/* Mobile menu */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2 }}
+            className="md:hidden overflow-hidden border-t border-white/[0.06] bg-[#111318]"
+          >
+            <div className="container mx-auto px-4 py-3 flex flex-col gap-1">
+              <button onClick={() => scrollToSection('projects')} className={navItemClass('projects')}>
+                {translations.header.projects}
+              </button>
+              <button onClick={() => scrollToSection('skills')} className={navItemClass('skills')}>
+                {translations.header.skills}
+              </button>
+              <button onClick={() => handleNavigate('/contact')} className={navItemClass('/contact')}>
+                {translations.header.contact}
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 };
