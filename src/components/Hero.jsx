@@ -2,13 +2,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowDown } from 'lucide-react';
 import { useLanguage } from '@/components/LanguageProvider';
-import { useTheme } from '@/components/ThemeProvider';
 import { cn } from '@/lib/utils';
 
 const Hero = () => {
   const { translations } = useLanguage();
-  const { theme } = useTheme();
-  const isDark = theme === 'dark';
 
   const scrollToProjects = () => {
     document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
@@ -17,31 +14,26 @@ const Hero = () => {
   if (!translations) return null;
 
   return (
-    <section className={cn(
-      'relative min-h-screen flex items-center justify-center px-4 pt-14 overflow-hidden',
-      isDark ? 'bg-[#0d0e11]' : 'bg-[#f4f6f9]'
-    )}>
+    <section className="relative min-h-screen flex items-center justify-center px-4 pt-14 overflow-hidden bg-background">
       {/* Background orbs */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div
-          className="absolute rounded-full blur-3xl opacity-20"
+          className="absolute rounded-full blur-3xl"
           style={{
-            width: 520, height: 520,
-            top: '10%', left: '15%',
-            background: isDark
-              ? 'radial-gradient(circle, hsl(204 82% 58%) 0%, transparent 70%)'
-              : 'radial-gradient(circle, hsl(204 82% 58% / 0.35) 0%, transparent 70%)',
+            width: 600, height: 600,
+            top: '5%', left: '10%',
+            opacity: 0.12,
+            background: 'radial-gradient(circle, hsl(204 82% 58%) 0%, transparent 70%)',
             animation: 'ce-orb1 14s ease-in-out infinite alternate',
           }}
         />
         <div
-          className="absolute rounded-full blur-3xl opacity-15"
+          className="absolute rounded-full blur-3xl"
           style={{
-            width: 400, height: 400,
-            bottom: '15%', right: '12%',
-            background: isDark
-              ? 'radial-gradient(circle, hsl(168 50% 60%) 0%, transparent 70%)'
-              : 'radial-gradient(circle, hsl(168 50% 60% / 0.30) 0%, transparent 70%)',
+            width: 450, height: 450,
+            bottom: '10%', right: '8%',
+            opacity: 0.10,
+            background: 'radial-gradient(circle, hsl(168 50% 56%) 0%, transparent 70%)',
             animation: 'ce-orb2 18s ease-in-out infinite alternate',
           }}
         />
@@ -49,30 +41,40 @@ const Hero = () => {
 
       <div className="container mx-auto max-w-4xl text-center relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="space-y-6 md:space-y-8"
+          transition={{ duration: 0.7 }}
+          className="flex flex-col items-center gap-6 md:gap-8"
         >
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+          {/* Main title — gradient inline pour éviter tout bug Tailwind */}
+          <h1
+            className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-none"
+            style={{
+              background: 'linear-gradient(135deg, hsl(204 82% 58%) 0%, hsl(204 82% 58% / 0.80) 42%, hsl(168 50% 56%) 100%)',
+              WebkitBackgroundClip: 'text',
+              backgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+            }}
+          >
             {translations.hero.heading}
           </h1>
 
-          <p className={cn(
-            'text-xl md:text-2xl max-w-2xl mx-auto leading-relaxed',
-            isDark ? 'text-[rgba(255,255,255,0.60)]' : 'text-[rgba(0,0,0,0.55)]'
-          )}>
+          <p className="text-base md:text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">
             {translations.hero.subheading}
           </p>
 
           <motion.button
             onClick={scrollToProjects}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="inline-flex items-center gap-2 px-8 py-4 bg-primary text-primary-foreground rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
+            className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-sm text-white shadow-lg transition-all duration-200"
+            style={{
+              background: 'linear-gradient(135deg, hsl(204 82% 52%), hsl(168 50% 48%))',
+              boxShadow: '0 0 0 1px hsl(204 82% 58% / 0.25), 0 8px 24px hsl(204 82% 58% / 0.20)',
+            }}
           >
             {translations.hero.button}
-            <ArrowDown className="w-5 h-5" />
+            <ArrowDown className="w-4 h-4" />
           </motion.button>
         </motion.div>
       </div>

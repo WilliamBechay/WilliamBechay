@@ -7,19 +7,19 @@
     "admin": "Admin"
   },
   "hero": {
-    "heading": "Exceptional Web Development",
-    "subheading": "Bringing your ideas to life with modern and powerful web solutions. Expertise in frontend, backend, and cloud development.",
+    "heading": "William Béchay",
+    "subheading": "Full-stack engineer. I build fast, scalable and production-ready web applications.",
     "button": "View my projects"
   },
   "projects": {
-    "heading": "My Recent Projects",
+    "heading": "Projects",
     "subheading": "",
     "wiibecDescription": "Wiibec is a non-profit organization dedicated to the financial education of young people. We work directly in schools to teach the essential basics of money management.",
     "mindovestDescription": "Mindovest is an all-in-one platform for tracking and optimizing your investment strategies, with portfolio management tools, a trader community, and its own cryptocurrency (MindoCoin).",
     "docustratDescription": "Docustrat is an AI-powered document strategy platform that helps businesses structure, generate and optimize their professional documentation with intelligent workflows."
   },
   "skills": {
-    "heading": "My Technical Skills",
+    "heading": "Skills",
     "subheading": "A range of technologies and tools I master to build complete and scalable web applications.",
     "contactButton": "Let's discuss your project",
     "categories": {
@@ -47,14 +47,14 @@
     ]
   },
   "contact": {
-    "heading": "Contact Me",
+    "heading": "Contact",
     "subtitle": "Fill out the form below and I'll get back to you as soon as possible.",
     "meta": {
       "title": "Contact - William Béchay",
       "description": "Get in touch with William Béchay. Send a message for project inquiries, collaborations, or general questions."
     },
     "form": {
-      "title": "Contact Us",
+      "title": "Contact",
       "name": "Name",
       "namePlaceholder": "Your Name",
       "email": "Email",
@@ -88,8 +88,8 @@
   },
   "home": {
     "meta": {
-      "title": "William Béchay - Web Developer",
-      "description": "Full-stack web developer specializing in creating powerful and innovative digital experiences."
+      "title": "William Béchay — Software Engineer",
+      "description": "Full-stack software engineer building fast, scalable and production-ready web applications."
     },
     "intro": { "greeting": "Software engineer specializing in systems and networks. My expertise spans backend development, infrastructure, software architecture, observability, and system reliability." },
     "helpText": "Need help on a project? You can contact me.",
