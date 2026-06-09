@@ -1,159 +1,82 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '@/components/LanguageProvider';
-import { Sparkles, Code2 } from 'lucide-react';
+import { ArrowDown } from 'lucide-react';
 
 const IntroSection = () => {
   const { translations } = useLanguage();
 
   if (!translations?.home?.intro) return null;
 
+  const scrollToProjects = () => {
+    document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
-    <section className="relative py-20 md:py-32 px-4 overflow-hidden min-h-[80vh] md:min-h-[90vh] flex items-center">
-      {/* Animated background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-accent/5 to-transparent animate-gradient-xy" />
-      
-      {/* Decorative animated blobs */}
-      <div className="absolute top-10 md:top-20 left-5 md:left-10 w-48 md:w-72 h-48 md:h-72 bg-primary/20 rounded-full blur-3xl animate-float" />
-      <div className="absolute bottom-10 md:bottom-20 right-5 md:right-10 w-64 md:w-96 h-64 md:h-96 bg-accent/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 md:w-[600px] h-80 md:h-[600px] bg-gradient-to-r from-primary/5 to-accent/5 rounded-full blur-3xl animate-pulse-glow" />
-      
-      {/* Floating particles */}
-      <div className="absolute inset-0 hidden md:block">
-        {[...Array(5)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-2 h-2 bg-primary/30 rounded-full"
-            style={{
-              left: `${20 + i * 15}%`,
-              top: `${30 + i * 10}%`,
-            }}
-            animate={{
-              y: [0, -30, 0],
-              opacity: [0.3, 0.8, 0.3],
-            }}
-            transition={{
-              duration: 3 + i,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: i * 0.5,
-            }}
-          />
-        ))}
+    <section className="relative min-h-screen flex items-center justify-center px-4 pt-14 overflow-hidden bg-background">
+      {/* Orbs — CE style */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute rounded-full blur-3xl" style={{ width: 600, height: 600, top: '5%', left: '10%', opacity: 0.12, background: 'radial-gradient(circle, hsl(204, 82%, 58%) 0%, transparent 70%)', animation: 'ce-orb1 14s ease-in-out infinite alternate' }} />
+        <div className="absolute rounded-full blur-3xl" style={{ width: 450, height: 450, bottom: '10%', right: '8%', opacity: 0.10, background: 'radial-gradient(circle, hsl(168, 50%, 56%) 0%, transparent 70%)', animation: 'ce-orb2 18s ease-in-out infinite alternate' }} />
       </div>
-      
-      <div className="container mx-auto max-w-5xl relative z-10">
+
+      <div className="container mx-auto max-w-4xl text-center relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-center space-y-6 md:space-y-10"
+          transition={{ duration: 0.7 }}
+          className="flex flex-col items-center gap-6 md:gap-8"
         >
-          {/* Badge with shimmer effect */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-4 md:px-5 py-2 md:py-2.5 rounded-full glass-strong border-2 border-primary/30 relative overflow-hidden group"
+          {/* Name — gradient inline */}
+          <h1
+            className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-none"
+            style={{
+              background: 'linear-gradient(135deg, hsl(204, 82%, 58%) 0%, hsl(204, 82%, 46%) 42%, hsl(168, 50%, 56%) 100%)',
+              WebkitBackgroundClip: 'text',
+              backgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              color: 'transparent',
+            }}
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-            <Sparkles className="w-3 h-3 md:w-4 md:h-4 text-primary animate-spin-slow" />
-            <span className="text-xs md:text-sm font-semibold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent relative z-10">
-              Full Stack Developer
-            </span>
-            <Code2 className="w-3 h-3 md:w-4 md:h-4 text-accent animate-pulse" />
-          </motion.div>
+            William Béchay
+          </h1>
 
-          {/* Main heading with stagger animation */}
-          <div className="space-y-2 md:space-y-4">
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight px-2"
-            >
-              <motion.span 
-                className="inline-block bg-gradient-to-r from-foreground via-primary to-accent bg-clip-text text-transparent"
-                animate={{
-                  backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-                }}
-                transition={{
-                  duration: 5,
-                  repeat: Infinity,
-                  ease: "linear"
-                }}
-                style={{ backgroundSize: '200% 200%' }}
-              >
-                Building Digital
-              </motion.span>
-              <br />
-              <motion.span 
-                className="inline-block bg-gradient-to-r from-accent via-primary to-foreground bg-clip-text text-transparent"
-                animate={{
-                  backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-                }}
-                transition={{
-                  duration: 5,
-                  repeat: Infinity,
-                  ease: "linear",
-                  delay: 0.5
-                }}
-                style={{ backgroundSize: '200% 200%' }}
-              >
-                Experiences
-              </motion.span>
-            </motion.h1>
-          </div>
+          {/* Role — muted, uppercase, spaced */}
+          <p style={{ fontSize: 13, fontWeight: 500, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'hsl(210, 12%, 45%)' }}>
+            Software Engineer
+          </p>
 
-          {/* Description with fade-in */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-            className="text-base md:text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed px-4"
+          {/* Bio */}
+          <p
+            className="text-base md:text-lg max-w-xl mx-auto leading-relaxed"
+            style={{ color: 'hsl(210, 12%, 52%)' }}
           >
             {translations.home.intro.greeting}
-          </motion.p>
+          </p>
 
-          {/* Decorative animated line */}
-          <motion.div
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 1.2, delay: 0.7, ease: "easeOut" }}
-            className="h-1 w-32 md:w-48 mx-auto rounded-full relative overflow-hidden"
+          {/* CTA */}
+          <motion.button
+            onClick={scrollToProjects}
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
+            style={{
+              background: 'linear-gradient(135deg, hsl(204, 82%, 52%), hsl(168, 50%, 48%))',
+              boxShadow: '0 0 0 1px hsl(204, 82%, 58%, 0.25), 0 8px 24px hsl(204, 82%, 58%, 0.20)',
+              color: '#fff',
+              border: 'none',
+              padding: '12px 28px',
+              borderRadius: '12px',
+              fontWeight: 600,
+              fontSize: 14,
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 8,
+              cursor: 'pointer',
+            }}
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-primary via-accent to-primary animate-gradient-x" />
-          </motion.div>
-
-          {/* Floating stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.9 }}
-            className="flex flex-wrap justify-center gap-4 md:gap-8 mt-8 md:mt-12 px-2"
-          >
-            {[
-              { label: 'Years Experience', value: '3+' },
-              { label: 'Projects Completed', value: '10+' },
-              { label: 'Technologies', value: '15+' },
-            ].map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                whileHover={{ scale: 1.1, y: -5 }}
-                className="glass rounded-2xl px-4 md:px-6 py-3 md:py-4 min-w-[100px] md:min-w-[120px] group cursor-default"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 1 + index * 0.1 }}
-              >
-                <div className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent group-hover:scale-110 transition-transform">
-                  {stat.value}
-                </div>
-                <div className="text-xs md:text-sm text-muted-foreground mt-1">
-                  {stat.label}
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+            {translations.hero?.button || 'View my projects'}
+            <ArrowDown style={{ width: 16, height: 16 }} />
+          </motion.button>
         </motion.div>
       </div>
     </section>
