@@ -2,7 +2,6 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowDown } from 'lucide-react';
 import { useLanguage } from '@/components/LanguageProvider';
-import { cn } from '@/lib/utils';
 
 const Hero = () => {
   const { translations } = useLanguage();
@@ -46,20 +45,23 @@ const Hero = () => {
           transition={{ duration: 0.7 }}
           className="flex flex-col items-center gap-6 md:gap-8"
         >
-          {/* Main title — gradient inline pour éviter tout bug Tailwind */}
           <h1
             className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-none"
             style={{
-              background: 'linear-gradient(135deg, hsl(204 82% 58%) 0%, hsl(204 82% 58% / 0.80) 42%, hsl(168 50% 56%) 100%)',
+              background: 'linear-gradient(135deg, hsl(204, 82%, 58%) 0%, hsl(204, 82%, 46%) 42%, hsl(168, 50%, 56%) 100%)',
               WebkitBackgroundClip: 'text',
               backgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
+              color: 'transparent',
             }}
           >
             {translations.hero.heading}
           </h1>
 
-          <p className="text-base md:text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">
+          <p
+            className="text-base md:text-lg max-w-xl mx-auto leading-relaxed"
+            style={{ color: 'hsl(210, 12%, 52%)' }}
+          >
             {translations.hero.subheading}
           </p>
 
@@ -67,14 +69,23 @@ const Hero = () => {
             onClick={scrollToProjects}
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.96 }}
-            className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-sm text-white shadow-lg transition-all duration-200"
             style={{
-              background: 'linear-gradient(135deg, hsl(204 82% 52%), hsl(168 50% 48%))',
-              boxShadow: '0 0 0 1px hsl(204 82% 58% / 0.25), 0 8px 24px hsl(204 82% 58% / 0.20)',
+              background: 'linear-gradient(135deg, hsl(204, 82%, 52%), hsl(168, 50%, 48%))',
+              boxShadow: '0 0 0 1px hsl(204, 82%, 58%, 0.25), 0 8px 24px hsl(204, 82%, 58%, 0.20)',
+              color: '#fff',
+              border: 'none',
+              padding: '12px 28px',
+              borderRadius: '12px',
+              fontWeight: '600',
+              fontSize: '14px',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              cursor: 'pointer',
             }}
           >
             {translations.hero.button}
-            <ArrowDown className="w-4 h-4" />
+            <ArrowDown style={{ width: 16, height: 16 }} />
           </motion.button>
         </motion.div>
       </div>
