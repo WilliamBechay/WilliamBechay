@@ -15,7 +15,8 @@
     "heading": "My Recent Projects",
     "subheading": "",
     "wiibecDescription": "Wiibec is a non-profit organization dedicated to the financial education of young people. We work directly in schools to teach the essential basics of money management.",
-    "mindovestDescription": "Mindovest is an all-in-one platform for tracking and optimizing your investment strategies, with portfolio management tools, a trader community, and its own cryptocurrency (MindoCoin)."
+    "mindovestDescription": "Mindovest is an all-in-one platform for tracking and optimizing your investment strategies, with portfolio management tools, a trader community, and its own cryptocurrency (MindoCoin).",
+    "docustratDescription": "Docustrat is an AI-powered document strategy platform that helps businesses structure, generate and optimize their professional documentation with intelligent workflows."
   },
   "skills": {
     "heading": "My Technical Skills",
@@ -27,118 +28,22 @@
       "tools": "Tools & DevOps"
     },
     "items": [
-      {
-        "name": "JavaScript",
-        "description": "Deep proficiency for dynamic and interactive web development.",
-        "icon": "js",
-        "experience": "5+ years",
-        "category": "frontend"
-      },
-      {
-        "name": "React.js",
-        "description": "Building modern and performant user interfaces with React and its ecosystem.",
-        "icon": "react",
-        "experience": "4+ years",
-        "category": "frontend"
-      },
-      {
-        "name": "Tailwind CSS",
-        "description": "Rapid and efficient styling of applications with the utility-first CSS framework.",
-        "icon": "tailwindcss",
-        "experience": "3+ years",
-        "category": "frontend"
-      },
-      {
-        "name": "HTML",
-        "description": "Solid foundations for semantic web structures.",
-        "icon": "html",
-        "experience": "5+ years",
-        "category": "frontend"
-      },
-      {
-        "name": "Node.js",
-        "description": "Development of robust servers and RESTful APIs with Node.js and Express.",
-        "icon": "nodejs",
-        "experience": "4+ years",
-        "category": "backend"
-      },
-      {
-        "name": "Python",
-        "description": "Using Python for backend, scripting, and automation.",
-        "icon": "python",
-        "experience": "3+ years",
-        "category": "backend"
-      },
-      {
-        "name": "PostgreSQL",
-        "description": "Design and management of complex relational databases.",
-        "icon": "postgresql",
-        "experience": "3+ years",
-        "category": "backend"
-      },
-      {
-        "name": "MongoDB",
-        "description": "Development with NoSQL databases for flexible and scalable applications.",
-        "icon": "mongodb",
-        "experience": "2+ years",
-        "category": "backend"
-      },
-      {
-        "name": "Git",
-        "description": "Version control and code management.",
-        "icon": "git",
-        "experience": "5+ years",
-        "category": "tools"
-      },
-      {
-        "name": "GitHub",
-        "description": "Collaboration and repository hosting.",
-        "icon": "github",
-        "experience": "5+ years",
-        "category": "tools"
-      },
-      {
-        "name": "Docker",
-        "description": "Containerization of applications for consistent and reproducible deployments.",
-        "icon": "docker",
-        "experience": "2+ years",
-        "category": "tools"
-      },
-      {
-        "name": "TypeScript",
-        "description": "Building scalable and type-safe applications with TypeScript.",
-        "icon": "typescript",
-        "experience": "3+ years",
-        "category": "frontend"
-      },
-      {
-        "name": "Next.js",
-        "description": "Server-side rendering and static site generation with React.",
-        "icon": "nextjs",
-        "experience": "3+ years",
-        "category": "frontend"
-      },
-      {
-        "name": "Express.js",
-        "description": "Building fast and scalable RESTful APIs.",
-        "icon": "express",
-        "experience": "4+ years",
-        "category": "backend"
-      },
-      {
-        "name": "Prisma",
-        "description": "Modern ORM for type-safe database access.",
-        "icon": "prisma",
-        "experience": "2+ years",
-        "category": "backend"
-      },
-      {
-        "name": "Jest",
-        "description": "Unit testing and test-driven development.",
-        "icon": "jest",
-        "experience": "3+ years",
-        "category": "tools"
-      }
+      { "name": "JavaScript", "description": "Deep proficiency for dynamic and interactive web development.", "icon": "js", "experience": "5+ years", "category": "frontend" },
+      { "name": "React.js", "description": "Building modern and performant user interfaces with React and its ecosystem.", "icon": "react", "experience": "4+ years", "category": "frontend" },
+      { "name": "Tailwind CSS", "description": "Rapid and efficient styling of applications with the utility-first CSS framework.", "icon": "tailwindcss", "experience": "3+ years", "category": "frontend" },
+      { "name": "HTML", "description": "Solid foundations for semantic web structures.", "icon": "html", "experience": "5+ years", "category": "frontend" },
+      { "name": "Node.js", "description": "Development of robust servers and RESTful APIs with Node.js and Express.", "icon": "nodejs", "experience": "4+ years", "category": "backend" },
+      { "name": "Python", "description": "Using Python for backend, scripting, and automation.", "icon": "python", "experience": "3+ years", "category": "backend" },
+      { "name": "PostgreSQL", "description": "Design and management of complex relational databases.", "icon": "postgresql", "experience": "3+ years", "category": "backend" },
+      { "name": "MongoDB", "description": "Development with NoSQL databases for flexible and scalable applications.", "icon": "mongodb", "experience": "2+ years", "category": "backend" },
+      { "name": "Git", "description": "Version control and code management.", "icon": "git", "experience": "5+ years", "category": "tools" },
+      { "name": "GitHub", "description": "Collaboration and repository hosting.", "icon": "github", "experience": "5+ years", "category": "tools" },
+      { "name": "Docker", "description": "Containerization of applications for consistent and reproducible deployments.", "icon": "docker", "experience": "2+ years", "category": "tools" },
+      { "name": "TypeScript", "description": "Building scalable and type-safe applications with TypeScript.", "icon": "typescript", "experience": "3+ years", "category": "frontend" },
+      { "name": "Next.js", "description": "Server-side rendering and static site generation with React.", "icon": "nextjs", "experience": "3+ years", "category": "frontend" },
+      { "name": "Express.js", "description": "Building fast and scalable RESTful APIs.", "icon": "express", "experience": "4+ years", "category": "backend" },
+      { "name": "Prisma", "description": "Modern ORM for type-safe database access.", "icon": "prisma", "experience": "2+ years", "category": "backend" },
+      { "name": "Jest", "description": "Unit testing and test-driven development.", "icon": "jest", "experience": "3+ years", "category": "tools" }
     ]
   },
   "contact": {
@@ -170,19 +75,10 @@
       "sending": "Sending..."
     },
     "toast": {
-      "success": {
-        "title": "Message Sent!",
-        "description": "Thank you for your message. I will get back to you shortly."
-      },
-      "error": {
-        "title": "Error!",
-        "description": "Your message could not be sent. Please try again."
-      }
+      "success": { "title": "Message Sent!", "description": "Thank you for your message. I will get back to you shortly." },
+      "error": { "title": "Error!", "description": "Your message could not be sent. Please try again." }
     },
-    "options": {
-      "title": "Other Ways to Connect",
-      "email": "williambechay@hotmail.com"
-    },
+    "options": { "title": "Other Ways to Connect", "email": "williambechay@hotmail.com" },
     "helpText": "Need help on a project? You can contact me.",
     "tagline": "Can't build it, can't understand it."
   },
@@ -195,17 +91,12 @@
       "title": "William Béchay - Web Developer",
       "description": "Full-stack web developer specializing in creating powerful and innovative digital experiences."
     },
-    "intro": {
-      "greeting": "Software engineer specializing in systems and networks. My expertise spans backend development, infrastructure, software architecture, observability, and system reliability."
-    },
+    "intro": { "greeting": "Software engineer specializing in systems and networks. My expertise spans backend development, infrastructure, software architecture, observability, and system reliability." },
     "helpText": "Need help on a project? You can contact me.",
     "tagline": "Can't build it, can't understand it."
   },
   "admin": {
-    "meta": {
-      "title": "Admin - William Béchay",
-      "description": "Administration panel to manage submissions."
-    },
+    "meta": { "title": "Admin - William Béchay", "description": "Administration panel to manage submissions." },
     "login": {
       "title": "Admin Access",
       "subtitle": "Please enter the password to continue.",

@@ -7,24 +7,27 @@ const ThemeContext = createContext({
 
 export const useTheme = () => {
   const context = useContext(ThemeContext);
-  if (!context) {
-    throw new Error('useTheme must be used within ThemeProvider');
-  }
+  if (!context) throw new Error('useTheme must be used within ThemeProvider');
   return context;
 };
 
 export const ThemeProvider = ({ children, defaultTheme = 'dark' }) => {
-  const [theme, setTheme] = useState(() => {
-    const stored = localStorage.getItem('theme');
-    return stored || defaultTheme;
+  const [theme, setThemeState] = useState(() => {
+    try {
+      return localStorage.getItem('theme') || defaultTheme;
+    } catch {
+      return defaultTheme;
+    }
   });
 
   useEffect(() => {
     const root = window.document.documentElement;
     root.classList.remove('light', 'dark');
     root.classList.add(theme);
-    localStorage.setItem('theme', theme);
+    try { localStorage.setItem('theme', theme); } catch {}
   }, [theme]);
+
+  const setTheme = (value) => setThemeState(value);
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
