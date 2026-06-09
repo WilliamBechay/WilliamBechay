@@ -1,72 +1,46 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '@/components/LanguageProvider';
-import { MessageCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
+import { gradientText, accentLine } from '@/styles/shared';
 
 const CallToAction = () => {
   const { translations } = useLanguage();
+  const navigate = useNavigate();
+  if (!translations) return null;
 
-  const getTranslation = (path, fallback) => {
-    if (!translations) return fallback;
-    return path.split('.').reduce((obj, key) => obj && obj[key], translations) || fallback;
-  };
+  const helpText = translations?.home?.helpText || 'Need help on a project? You can contact me.';
+  const tagline = translations?.home?.tagline || "Can't build it, can't understand it.";
 
   return (
-    <section className="relative py-16 md:py-24 px-4 overflow-hidden">
-      {/* Animated gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-accent/10 to-transparent animate-gradient-xy" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 md:w-[600px] h-96 md:h-[600px] bg-primary/5 rounded-full blur-3xl" />
-      
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
-        className="container mx-auto max-w-4xl relative z-10"
-      >
-        <div className="glass rounded-2xl md:rounded-3xl p-8 md:p-12 lg:p-16 text-center space-y-6 md:space-y-8">
-          {/* Icon */}
-          <motion.div
-            initial={{ scale: 0 }}
-            whileInView={{ scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ type: "spring", stiffness: 200, delay: 0.2 }}
-            className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br from-primary to-accent shadow-lg"
-          >
-            <MessageCircle className="w-8 h-8 md:w-10 md:h-10 text-primary-foreground" />
-          </motion.div>
+    <section className="relative py-16 md:py-24 px-4 overflow-hidden bg-background">
+      <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 60% 50% at 50% 50%, hsl(204 82% 58% / 0.05) 0%, transparent 70%)' }} />
 
-          {/* Heading */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="space-y-3 md:space-y-4"
-          >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">
-              <span className="bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-                Let's Build Together
-              </span>
-            </h2>
-            
-            <p className="text-base md:text-lg lg:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed px-2">
-              {getTranslation('home.helpText', 'Need help on a project? You can contact me.')}
-            </p>
-          </motion.div>
+      <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="container mx-auto max-w-2xl relative z-10">
+        <div className="glass rounded-2xl p-8 md:p-12 text-center flex flex-col items-center gap-6">
 
-          {/* Tagline */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="pt-4 md:pt-6 border-t border-border/50"
+          <h2 style={{ ...gradientText, fontSize: 'clamp(1.6rem, 3.5vw, 2.4rem)', fontWeight: 300, letterSpacing: '-0.025em', lineHeight: 1.2 }}>
+            Let's Build Together
+          </h2>
+
+          <p style={{ color: 'hsl(210, 12%, 52%)', fontSize: '1rem', lineHeight: 1.7, maxWidth: 420 }}>
+            {helpText}
+          </p>
+
+          <div style={accentLine} />
+
+          <motion.button
+            onClick={() => navigate('/contact')}
+            whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }}
+            style={{ background: 'linear-gradient(135deg, hsl(204,82%,52%), hsl(168,50%,48%))', boxShadow: '0 0 0 1px hsl(204 82% 58% / 0.25), 0 8px 24px hsl(204 82% 58% / 0.18)', color: '#fff', border: 'none', padding: '11px 26px', borderRadius: 12, fontWeight: 600, fontSize: 14, display: 'inline-flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}
           >
-            <p className="text-sm md:text-base font-medium bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent italic">
-              {getTranslation('home.tagline', "Can't build it, can't understand it.")}
-            </p>
-          </motion.div>
+            Contact me <ArrowRight style={{ width: 15, height: 15 }} />
+          </motion.button>
+
+          <p style={{ fontSize: 12, fontStyle: 'italic', color: 'hsl(210, 12%, 42%)', marginTop: -8 }}>
+            {tagline}
+          </p>
         </div>
       </motion.div>
     </section>
