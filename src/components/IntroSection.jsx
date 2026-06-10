@@ -18,14 +18,11 @@ const IntroSection = () => {
 
   return (
     <section className="relative min-h-[90vh] flex items-center px-4 pt-14 overflow-hidden">
-      {/* Orbs */}
+      {/* Orbs only — no grid */}
       <div className="absolute top-[-120px] left-[-80px] w-[520px] h-[520px] rounded-full blur-[120px] opacity-[0.12] pointer-events-none"
         style={{ background: 'radial-gradient(circle, hsl(204 82% 58%) 0%, transparent 70%)', animation: 'ce-orb1 14s ease-in-out infinite alternate' }} />
       <div className="absolute bottom-[-80px] right-[-60px] w-[400px] h-[400px] rounded-full blur-[100px] opacity-[0.10] pointer-events-none"
         style={{ background: 'radial-gradient(circle, hsl(168 50% 60%) 0%, transparent 70%)', animation: 'ce-orb2 18s ease-in-out infinite alternate' }} />
-      {/* Grid */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.025]"
-        style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)', backgroundSize: '48px 48px' }} />
 
       <div className="container mx-auto max-w-4xl relative z-10">
         <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}
@@ -73,7 +70,7 @@ const IntroSection = () => {
             ))}
           </motion.div>
 
-          {/* CTA button — slim */}
+          {/* CTA button */}
           <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.85 }}>
             <button
               onClick={scrollToProjects}
