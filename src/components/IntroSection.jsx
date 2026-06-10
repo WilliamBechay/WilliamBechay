@@ -35,7 +35,7 @@ const IntroSection = () => {
           <div style={accentLine} />
 
           <div className="flex flex-wrap justify-center gap-3 md:gap-5">
-            {[{ label: 'Years Experience', value: '3+' }, { label: 'Projects Completed', value: '10+' }, { label: 'Technologies', value: '15+' }].map((stat, i) => (
+            {[{ label: 'Years Experience', value: '6+' }, { label: 'Projects Completed', value: '10+' }, { label: 'Technologies', value: '15+' }].map((stat, i) => (
               <motion.div key={stat.label} whileHover={{ y: -3 }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 + i * 0.08 }} className="glass rounded-xl px-5 py-3 cursor-default">
                 <div style={{ ...gradientText, fontSize: '1.5rem', fontWeight: 600, letterSpacing: '-0.02em' }}>{stat.value}</div>
                 <div style={{ fontSize: 11, color: 'hsl(210, 12%, 50%)', marginTop: 2, letterSpacing: '0.04em' }}>{stat.label}</div>
