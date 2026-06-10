@@ -11,15 +11,33 @@
     "subheading": "Ingénieur full-stack. Je conçois des applications web rapides, scalables et prêtes pour la production.",
     "button": "Voir mes projets"
   },
+  "intro": {
+    "badge": "Développeur Full Stack · Disponible",
+    "stats": {
+      "experience": "Ans d'expérience",
+      "projects": "Projets réalisés",
+      "technologies": "Technologies"
+    },
+    "status": {
+      "openToWork": "Ouvert aux opportunités",
+      "active": "Actif",
+      "location": "Montréal, QC"
+    },
+    "scrollCta": "Voir mes projets"
+  },
   "projects": {
     "heading": "Projets",
     "subheading": "",
+    "badge": "Travaux récents",
+    "techStack": "Stack technique",
+    "visitProject": "Voir le projet",
     "wiibecDescription": "Wiibec est un organisme sans but lucratif dédié à l'éducation financière des jeunes. Nous intervenons directement dans les écoles pour enseigner les bases essentielles de la gestion de l'argent.",
     "mindovestDescription": "Mindovest est une plateforme tout-en-un pour suivre et optimiser vos stratégies d'investissement, avec des outils de gestion de portefeuille, une communauté de traders et sa propre cryptomonnaie (MindoCoin).",
     "docustratDescription": "Docustrat est une plateforme de stratégie documentaire propulsée par l'IA, qui aide les entreprises à structurer, générer et optimiser leur documentation professionnelle."
   },
   "skills": {
     "heading": "Compétences",
+    "badge": "Expertise technique",
     "subheading": "Un éventail de technologies et d'outils que je maîtrise pour construire des applications web complètes et évolutives.",
     "contactButton": "Discutons de votre projet",
     "categories": {
@@ -46,15 +64,22 @@
       { "name": "Jest", "description": "Tests unitaires et développement piloté par les tests.", "icon": "jest", "experience": "3+ ans", "category": "tools" }
     ]
   },
+  "cta": {
+    "heading": "Construisons ensemble",
+    "sub": "Besoin d'aide sur un projet ? Contactez-moi.",
+    "button": "Me contacter",
+    "tagline": "Can't build it, can't understand it."
+  },
   "contact": {
     "heading": "Contact",
     "subtitle": "Remplissez le formulaire ci-dessous et je vous répondrai dès que possible.",
+    "otherWays": "Autres moyens de contact",
     "meta": {
       "title": "Contact - William Béchay",
       "description": "Contactez William Béchay pour toute demande de projet, collaboration ou question générale."
     },
     "form": {
-      "title": "Contact",
+      "title": "Prendre contact",
       "name": "Nom",
       "namePlaceholder": "Votre Nom",
       "email": "Email",
@@ -71,18 +96,20 @@
       },
       "message": "Message",
       "messagePlaceholder": "Votre message ici...",
-      "submit": "Envoyer le Message",
+      "submit": "Envoyer le message",
       "sending": "Envoi en cours..."
     },
     "toast": {
-      "success": { "title": "Message Envoyé !", "description": "Merci pour votre message. Je vous répondrai sous peu." },
+      "success": { "title": "Message envoyé !", "description": "Merci pour votre message. Je vous répondrai sous peu." },
       "error": { "title": "Erreur !", "description": "Votre message n'a pas pu être envoyé. Veuillez réessayer." }
     },
-    "options": { "title": "Autres Moyens de Connexion", "email": "williambechay@hotmail.com" },
-    "helpText": "Besoin d'aide sur un projet? Vous pouvez me contacter.",
+    "options": { "title": "Autres moyens de contact", "email": "williambechay@hotmail.com" },
+    "helpText": "Besoin d'aide sur un projet ? Vous pouvez me contacter.",
     "tagline": "Can't build it, can't understand it."
   },
   "footer": {
+    "role": "Développeur Full Stack",
+    "tagline": "Création d'expériences numériques avec les technologies modernes.",
     "rights": "© 2025 William Béchay. Tous droits réservés.",
     "crafted_with": "Réalisé avec"
   },
@@ -92,7 +119,7 @@
       "description": "Ingénieur full-stack spécialisé dans la création d'applications web rapides, scalables et prêtes pour la production."
     },
     "intro": { "greeting": "Ingénieur logiciel spécialisé en systèmes et réseaux. Mon expertise couvre le développement backend, l'infrastructure, les architectures logicielles, l'observabilité et la fiabilité des systèmes." },
-    "helpText": "Besoin d'aide sur un projet? Vous pouvez me contacter.",
+    "helpText": "Besoin d'aide sur un projet ? Vous pouvez me contacter.",
     "tagline": "Can't build it, can't understand it."
   },
   "admin": {
@@ -107,7 +134,7 @@
       "error": "Mot de passe incorrect. Veuillez réessayer."
     },
     "dashboard": {
-      "title": "Tableau de Bord",
+      "title": "Tableau de bord",
       "subtitle": "Messages reçus du formulaire de contact.",
       "logout": "Déconnexion",
       "name": "Nom",
