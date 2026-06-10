@@ -21,20 +21,23 @@ const DocustratPlaceholder = ({ isDark }) => (
 );
 
 const Projects = () => {
-  const { translations } = useLanguage();
+  const { translations: t } = useLanguage();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
-  if (!translations?.projects) return null;
+  if (!t?.projects) return null;
 
   const projects = [
-    { id: 1, title: 'Wiibec.com', description: translations.projects.wiibecDescription, imageSrc: wiibecImage, imageAlt: 'Wiibec.com', link: 'https://wiibec.com', technologies: ['React', 'Vite', 'Tailwind CSS', 'Node.js', 'Supabase', 'Stripe'] },
-    { id: 2, title: 'Mindovest.com', description: translations.projects.mindovestDescription, imageSrc: mindovestImage, imageAlt: 'Mindovest.com', link: 'https://mindovest.com', technologies: ['React', 'Vite', 'Tailwind CSS', 'Capacitor', 'Supabase', 'TypeScript'] },
-    { id: 3, title: 'Docustrat.com', description: translations.projects.docustratDescription || 'AI-powered document strategy platform.', imageSrc: null, imageAlt: 'Docustrat.com', link: 'https://docustrat.com', technologies: ['React', 'TypeScript', 'Supabase', 'AI/LLM', 'Tailwind CSS'] },
+    { id: 1, title: 'Wiibec.com',     description: t.projects.wiibecDescription,    imageSrc: wiibecImage,    imageAlt: 'Wiibec.com',     link: 'https://wiibec.com',     technologies: ['React', 'Vite', 'Tailwind CSS', 'Node.js', 'Supabase', 'Stripe'] },
+    { id: 2, title: 'Mindovest.com',  description: t.projects.mindovestDescription,  imageSrc: mindovestImage, imageAlt: 'Mindovest.com',  link: 'https://mindovest.com',  technologies: ['React', 'Vite', 'Tailwind CSS', 'Capacitor', 'Supabase', 'TypeScript'] },
+    { id: 3, title: 'Docustrat.com',  description: t.projects.docustratDescription,  imageSrc: null,           imageAlt: 'Docustrat.com',  link: 'https://docustrat.com',  technologies: ['React', 'TypeScript', 'Supabase', 'AI/LLM', 'Tailwind CSS'] },
   ];
 
   const cardBase = cn('group relative flex flex-col rounded-2xl overflow-hidden border transition-all duration-300 h-full', isDark ? 'bg-[#13151b] border-white/[0.07] hover:border-white/[0.14]' : 'bg-white border-black/[0.08] hover:border-black/[0.16] shadow-sm hover:shadow-md');
-  const techTag = cn('px-2.5 py-1 text-xs font-medium rounded-full border', isDark ? 'bg-white/[0.04] border-white/[0.08] text-[rgba(255,255,255,0.70)]' : 'bg-black/[0.04] border-black/[0.08] text-[rgba(0,0,0,0.60)]');
-  const techBox = cn('rounded-xl p-4 border', isDark ? 'bg-white/[0.02] border-white/[0.06]' : 'bg-white/70 border-black/[0.07] shadow-sm');
+  const techTag  = cn('px-2.5 py-1 text-xs font-medium rounded-full border', isDark ? 'bg-white/[0.04] border-white/[0.08] text-[rgba(255,255,255,0.70)]' : 'bg-black/[0.04] border-black/[0.08] text-[rgba(0,0,0,0.60)]');
+  const techBox  = cn('rounded-xl p-4 border', isDark ? 'bg-white/[0.02] border-white/[0.06]' : 'bg-white/70 border-black/[0.07] shadow-sm');
+
+  const badgeLabel   = t.projects.badge   ?? 'Featured Work';
+  const techLabel    = t.projects.techStack ?? 'Tech Stack';
 
   return (
     <section id="projects" className="relative py-16 md:py-24 px-4 overflow-hidden bg-background">
@@ -42,10 +45,11 @@ const Projects = () => {
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="container mx-auto max-w-7xl relative z-10">
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-12 md:mb-16 flex flex-col items-center gap-4">
-          <div style={badge}><Sparkles style={{ width: 12, height: 12 }} />Featured Work</div>
-          <h2 style={sectionTitle}>{translations.projects.heading}</h2>
-          {translations.projects.subheading && <p style={subtitleStyle}>{translations.projects.subheading}</p>}
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}
+          className="text-center mb-12 md:mb-16 flex flex-col items-center gap-4">
+          <div style={badge}><Sparkles style={{ width: 12, height: 12 }} />{badgeLabel}</div>
+          <h2 style={sectionTitle}>{t.projects.heading}</h2>
+          {t.projects.subheading && <p style={subtitleStyle}>{t.projects.subheading}</p>}
           <div style={accentLine} />
         </motion.div>
 
@@ -64,8 +68,11 @@ const Projects = () => {
                           <h3 className="text-xl font-semibold tracking-tight text-foreground group-hover:text-primary transition-colors duration-200">{project.title}</h3>
                           <div className="h-px w-10 group-hover:w-16 transition-all duration-300" style={{ background: 'linear-gradient(90deg, hsl(204,82%,58%), hsl(168,50%,56%))' }} />
                         </div>
-                        <a href={project.link} target="_blank" rel="noopener noreferrer" className="flex-shrink-0 flex items-center justify-center w-9 h-9 rounded-xl text-white shadow hover:scale-110 transition-all duration-200" style={{ background: 'linear-gradient(135deg, hsl(204,82%,52%), hsl(168,50%,48%))' }}>
-                          <ArrowUpRight style={{ width: 15, height: 15 }} />
+                        <a href={project.link} target="_blank" rel="noopener noreferrer"
+                          className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-lg text-white transition-all duration-200 hover:scale-110"
+                          style={{ background: 'linear-gradient(135deg, hsl(204,82%,52%), hsl(168,50%,48%))' }}
+                          aria-label={t.projects.visitProject ?? `Visit ${project.title}`}>
+                          <ArrowUpRight style={{ width: 13, height: 13 }} />
                         </a>
                       </div>
                       <p className="text-sm leading-relaxed flex-grow line-clamp-4 text-muted-foreground">{project.description}</p>
@@ -76,8 +83,8 @@ const Projects = () => {
               </div>
               <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: index * 0.1 + 0.2 }} className={techBox}>
                 <div className="flex items-center gap-2 mb-2">
-                  <Sparkles style={{ width: 13, height: 13, color: 'hsl(168,50%,56%)' }} />
-                  <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'hsl(210,12%,45%)' }}>Tech Stack</span>
+                  <Sparkles style={{ width: 12, height: 12, color: 'hsl(168,50%,56%)' }} />
+                  <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'hsl(210,12%,45%)' }}>{techLabel}</span>
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {project.technologies.map(tech => <span key={tech} className={techTag}>{tech}</span>)}
