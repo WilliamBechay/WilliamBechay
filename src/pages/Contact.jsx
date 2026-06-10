@@ -1,266 +1,171 @@
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
-import { Send, Mail, Linkedin, Github, Loader2, MessageCircle } from 'lucide-react';
+import { Send, Mail, Linkedin, Github, Loader2 } from 'lucide-react';
 import { useLanguage } from '@/components/LanguageProvider';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/lib/customSupabaseClient';
+import { gradientText, sectionTitle, badge, subtitleStyle, accentLine } from '@/styles/shared';
 
 const Contact = () => {
-  const { translations } = useLanguage();
+  const { translations: t } = useLanguage();
   const { toast } = useToast();
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    reason: '',
-    message: '',
-  });
+  const [formData, setFormData] = useState({ name: '', email: '', subject: '', reason: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const getTranslation = (path, fallback) => {
-    if (!translations) return fallback;
-    return path.split('.').reduce((obj, key) => obj && obj[key], translations) || fallback;
+  const g = (path, fallback) => {
+    if (!t) return fallback;
+    return path.split('.').reduce((o, k) => o && o[k], t) || fallback;
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleReasonChange = (value) => {
-    setFormData((prev) => ({ ...prev, reason: value }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-
     const { name, email, subject, reason, message } = formData;
     const { error } = await supabase.from('contact_messages').insert([{ name, email, subject, reason, message }]);
-
     setIsSubmitting(false);
-
     if (error) {
-      toast({
-        title: getTranslation('contact.toast.error.title', 'Error!'),
-        description: getTranslation('contact.toast.error.description', 'Your message could not be sent. Please try again.'),
-        variant: 'destructive',
-      });
-      console.error('Error submitting form:', error);
+      toast({ title: g('contact.toast.error.title', 'Error!'), description: g('contact.toast.error.description', 'Could not send. Please try again.'), variant: 'destructive' });
     } else {
-      toast({
-        title: getTranslation('contact.toast.success.title', 'Message Sent!'),
-        description: getTranslation('contact.toast.success.description', 'Thank you for your message. I will get back to you shortly.'),
-      });
+      toast({ title: g('contact.toast.success.title', 'Message Sent!'), description: g('contact.toast.success.description', 'Thank you! I will get back to you shortly.') });
       setFormData({ name: '', email: '', subject: '', reason: '', message: '' });
     }
   };
 
-  const contactReasons = [
-    { value: "project", label: getTranslation("contact.form.reason.project", "New Project Inquiry") },
-    { value: "bug", label: getTranslation("contact.form.reason.bug", "Bug Report") },
-    { value: "collaboration", label: getTranslation("contact.form.reason.collaboration", "Collaboration Proposal") },
-    { value: "general", label: getTranslation("contact.form.reason.general", "General Question") },
+  const reasons = [
+    { value: 'project',       label: g('contact.form.reason.project',       'New Project Inquiry') },
+    { value: 'bug',           label: g('contact.form.reason.bug',           'Bug Report') },
+    { value: 'collaboration', label: g('contact.form.reason.collaboration', 'Collaboration Proposal') },
+    { value: 'general',       label: g('contact.form.reason.general',       'General Question') },
   ];
-  
-  const socialLinks = [
-    { href: 'https://www.linkedin.com/in/william-bechay', label: 'LinkedIn', icon: <Linkedin className="w-5 h-5" /> },
-    { href: 'https://github.com/williambechay', label: 'GitHub', icon: <Github className="w-5 h-5" /> },
+
+  const socials = [
+    { href: 'https://www.linkedin.com/in/william-bechay', label: 'LinkedIn', icon: <Linkedin className="w-4 h-4" /> },
+    { href: 'https://github.com/williambechay',           label: 'GitHub',   icon: <Github   className="w-4 h-4" /> },
   ];
+
+  const inputClass = "bg-background/50 border-border/50 focus:border-primary transition-colors text-sm";
 
   return (
     <>
       <Helmet>
-        <title>{getTranslation('contact.meta.title', 'Contact - William Béchay')}</title>
-        <meta name="description" content={getTranslation('contact.meta.description', 'Get in touch with William Béchay. Send a message for project inquiries, collaborations, or general questions.')} />
+        <title>{g('contact.meta.title', 'Contact - William Béchay')}</title>
+        <meta name="description" content={g('contact.meta.description', 'Get in touch with William Béchay.')} />
       </Helmet>
-      
+
       <div className="relative min-h-[calc(100vh-8rem)] py-12 md:py-16 px-4 overflow-hidden">
-        {/* Animated background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-accent/5 to-transparent animate-gradient-xy" />
-        <div className="absolute top-20 left-10 w-64 md:w-96 h-64 md:h-96 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-64 md:w-96 h-64 md:h-96 bg-accent/10 rounded-full blur-3xl" />
-        
-        <div className="relative z-10 container mx-auto max-w-4xl">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            {/* Header */}
-            <div className="text-center mb-8 md:mb-12 space-y-4">
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ type: "spring", delay: 0.2 }}
-                className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br from-primary to-accent shadow-lg"
-              >
-                <MessageCircle className="w-8 h-8 md:w-10 md:h-10 text-primary-foreground" />
-              </motion.div>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold bg-gradient-to-r from-foreground via-primary to-accent bg-clip-text text-transparent">
-                {getTranslation('contact.form.title', 'Get In Touch')}
-              </h1>
-              <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
-                {getTranslation('contact.subtitle', "Fill out the form below and I'll get back to you as soon as possible.")}
-              </p>
+        {/* Orbs — same as other pages */}
+        <div className="absolute top-[-80px] left-[-60px] w-[400px] h-[400px] rounded-full blur-[100px] opacity-[0.10] pointer-events-none"
+          style={{ background: 'radial-gradient(circle, hsl(204 82% 58%) 0%, transparent 70%)' }} />
+        <div className="absolute bottom-[-60px] right-[-40px] w-[320px] h-[320px] rounded-full blur-[90px] opacity-[0.08] pointer-events-none"
+          style={{ background: 'radial-gradient(circle, hsl(168 50% 60%) 0%, transparent 70%)' }} />
+
+        <div className="relative z-10 container mx-auto max-w-2xl">
+          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+
+            {/* Header — same pattern as other sections */}
+            <div className="text-center mb-8 flex flex-col items-center gap-3">
+              <div style={badge}>
+                <Mail style={{ width: 11, height: 11 }} />
+                {g('contact.heading', 'Contact')}
+              </div>
+              <h1 style={sectionTitle}>{g('contact.form.title', 'Get In Touch')}</h1>
+              <p style={subtitleStyle}>{g('contact.subtitle', "Fill out the form below and I'll get back to you as soon as possible.")}</p>
+              <div style={accentLine} />
             </div>
 
-            {/* Form Section */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="glass rounded-2xl md:rounded-3xl p-6 md:p-8 lg:p-10 shadow-2xl mb-8 md:mb-12"
-            >
-              <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label htmlFor="name" className="text-sm font-medium text-foreground">
-                    {getTranslation('contact.form.name', 'Name')}
-                  </label>
-                  <Input 
-                    id="name" 
-                    name="name" 
-                    type="text" 
-                    placeholder={getTranslation('contact.form.namePlaceholder', 'Your Name')} 
-                    value={formData.name} 
-                    onChange={handleChange} 
-                    required 
-                    className="bg-background/50 border-border/50 focus:border-primary transition-colors"
-                  />
+            {/* Form card */}
+            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+              className="glass rounded-2xl p-6 md:p-8 mb-8">
+              <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                <div className="space-y-1.5">
+                  <label htmlFor="name" className="text-xs font-medium text-muted-foreground">{g('contact.form.name', 'Name')}</label>
+                  <Input id="name" name="name" type="text" placeholder={g('contact.form.namePlaceholder', 'Your Name')} value={formData.name} onChange={handleChange} required className={inputClass} />
                 </div>
-                
-                <div className="space-y-2">
-                  <label htmlFor="email" className="text-sm font-medium text-foreground">
-                    {getTranslation('contact.form.email', 'Email')}
-                  </label>
-                  <Input 
-                    id="email" 
-                    name="email" 
-                    type="email" 
-                    placeholder={getTranslation('contact.form.emailPlaceholder', 'Your Email')} 
-                    value={formData.email} 
-                    onChange={handleChange} 
-                    required 
-                    className="bg-background/50 border-border/50 focus:border-primary transition-colors"
-                  />
+
+                <div className="space-y-1.5">
+                  <label htmlFor="email" className="text-xs font-medium text-muted-foreground">{g('contact.form.email', 'Email')}</label>
+                  <Input id="email" name="email" type="email" placeholder={g('contact.form.emailPlaceholder', 'Your Email')} value={formData.email} onChange={handleChange} required className={inputClass} />
                 </div>
-                
-                <div className="space-y-2">
-                  <label htmlFor="subject" className="text-sm font-medium text-foreground">
-                    {getTranslation('contact.form.subject', 'Subject')}
-                  </label>
-                  <Input 
-                    id="subject" 
-                    name="subject" 
-                    type="text" 
-                    placeholder={getTranslation('contact.form.subjectPlaceholder', 'What is this about?')} 
-                    value={formData.subject} 
-                    onChange={handleChange} 
-                    className="bg-background/50 border-border/50 focus:border-primary transition-colors"
-                  />
+
+                <div className="space-y-1.5">
+                  <label htmlFor="subject" className="text-xs font-medium text-muted-foreground">{g('contact.form.subject', 'Subject')}</label>
+                  <Input id="subject" name="subject" type="text" placeholder={g('contact.form.subjectPlaceholder', 'What is this about?')} value={formData.subject} onChange={handleChange} className={inputClass} />
                 </div>
-                
-                <div className="space-y-2">
-                  <label htmlFor="reason" className="text-sm font-medium text-foreground">
-                    {getTranslation('contact.form.reason.label', 'Reason for contact')}
-                  </label>
-                  <Select onValueChange={handleReasonChange} value={formData.reason}>
-                    <SelectTrigger id="reason" className="w-full bg-background/50 border-border/50 focus:border-primary transition-colors">
-                      <SelectValue placeholder={getTranslation('contact.form.reason.placeholder', 'Select a reason')} />
+
+                <div className="space-y-1.5">
+                  <label htmlFor="reason" className="text-xs font-medium text-muted-foreground">{g('contact.form.reason.label', 'Reason')}</label>
+                  <Select onValueChange={v => setFormData(p => ({ ...p, reason: v }))} value={formData.reason}>
+                    <SelectTrigger id="reason" className={`w-full ${inputClass}`}>
+                      <SelectValue placeholder={g('contact.form.reason.placeholder', 'Select a reason')} />
                     </SelectTrigger>
                     <SelectContent>
-                      {contactReasons.map(r => <SelectItem key={r.value} value={r.value}>{r.label}</SelectItem>)}
+                      {reasons.map(r => <SelectItem key={r.value} value={r.value}>{r.label}</SelectItem>)}
                     </SelectContent>
                   </Select>
                 </div>
-                
-                <div className="md:col-span-2 space-y-2">
-                  <label htmlFor="message" className="text-sm font-medium text-foreground">
-                    {getTranslation('contact.form.message', 'Message')}
-                  </label>
-                  <Textarea 
-                    id="message" 
-                    name="message" 
-                    placeholder={getTranslation('contact.form.messagePlaceholder', 'Your message here...')} 
-                    value={formData.message} 
-                    onChange={handleChange} 
-                    required 
-                    rows={5} 
-                    className="bg-background/50 border-border/50 focus:border-primary transition-colors resize-none"
-                  />
+
+                <div className="md:col-span-2 space-y-1.5">
+                  <label htmlFor="message" className="text-xs font-medium text-muted-foreground">{g('contact.form.message', 'Message')}</label>
+                  <Textarea id="message" name="message" placeholder={g('contact.form.messagePlaceholder', 'Your message here...')} value={formData.message} onChange={handleChange} required rows={5} className={`${inputClass} resize-none`} />
                 </div>
-                
-                <div className="md:col-span-2">
-                  <Button 
-                    type="submit" 
-                    size="lg" 
-                    disabled={isSubmitting} 
-                    className="w-full bg-gradient-to-r from-primary to-accent hover:shadow-lg hover:shadow-primary/50 transition-all duration-300"
+
+                {/* Slim button — same style as home */}
+                <div className="md:col-span-2 flex justify-end">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="group inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-medium transition-all duration-200 disabled:opacity-50"
+                    style={{ background: 'rgba(100,160,255,0.10)', border: '1px solid rgba(100,160,255,0.20)', color: 'hsl(204 82% 70%)' }}
                   >
                     {isSubmitting ? (
-                      <>
-                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                        {getTranslation('contact.form.sending', 'Sending...')}
-                      </>
+                      <><Loader2 size={12} className="animate-spin" />{g('contact.form.sending', 'Sending...')}</>
                     ) : (
-                      <>
-                        <Send className="mr-2 h-5 w-5" /> 
-                        {getTranslation('contact.form.submit', 'Send Message')}
-                      </>
+                      <><Send size={12} className="group-hover:translate-x-0.5 transition-transform" />{g('contact.form.submit', 'Send Message')}</>
                     )}
-                  </Button>
+                  </button>
                 </div>
               </form>
             </motion.div>
 
-            {/* Other Contact Methods */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="text-center space-y-6"
-            >
-              <h3 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-                {getTranslation('contact.options.title', 'Other Ways to Connect')}
-              </h3>
-              
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-                <a 
-                  href={`mailto:${getTranslation('contact.options.email', 'williambechay@hotmail.com')}`} 
-                  className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
-                >
-                  <Mail className="w-5 h-5"/>
-                  <span className="text-sm md:text-base">{getTranslation('contact.options.email', 'williambechay@hotmail.com')}</span>
+            {/* Other ways */}
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
+              className="text-center space-y-4">
+              <p className="text-xs font-semibold text-muted-foreground tracking-wider uppercase">
+                {g('contact.otherWays', 'Other Ways to Connect')}
+              </p>
+
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href={`mailto:${g('contact.options.email', 'williambechay@hotmail.com')}`}
+                  className="flex items-center gap-2 text-xs text-muted-foreground hover:text-primary transition-colors">
+                  <Mail className="w-3.5 h-3.5" />
+                  {g('contact.options.email', 'williambechay@hotmail.com')}
                 </a>
-                
-                <div className="flex items-center gap-4">
-                  {socialLinks.map(link => (
-                    <a 
-                      key={link.label} 
-                      href={link.href} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      aria-label={link.label} 
-                      className="p-3 rounded-xl glass hover:bg-gradient-to-r hover:from-primary/20 hover:to-accent/20 text-muted-foreground hover:text-primary transition-all duration-300 hover:scale-110"
-                    >
-                      {link.icon}
+                <div className="flex items-center gap-2">
+                  {socials.map(s => (
+                    <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label}
+                      className="flex items-center justify-center w-7 h-7 rounded-lg text-muted-foreground hover:text-primary transition-colors"
+                      style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)' }}>
+                      {s.icon}
                     </a>
                   ))}
                 </div>
               </div>
 
-              <div className="pt-6 space-y-2 border-t border-border/50">
-                <p className="text-muted-foreground">{getTranslation('contact.helpText', 'Need help on a project? You can contact me.')}</p>
-                <p className="text-sm font-medium bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent italic">
-                  {getTranslation('contact.tagline', "Can't build it, can't understand it.")}
-                </p>
+              <div className="pt-4 border-t border-border/30">
+                <p className="text-xs text-muted-foreground/60 italic">{g('contact.tagline', "Can't build it, can't understand it.")}</p>
               </div>
             </motion.div>
+
           </motion.div>
         </div>
       </div>
