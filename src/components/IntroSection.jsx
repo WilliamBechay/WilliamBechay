@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '@/components/LanguageProvider';
 import { Activity, Shield, ArrowDown } from 'lucide-react';
+import { badge, accentLine, gradientText } from '@/styles/shared';
 
 const IntroSection = () => {
   const { translations: t } = useLanguage();
@@ -11,14 +12,14 @@ const IntroSection = () => {
     document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
 
   const stats = [
-    { label: t.intro?.stats?.experience ?? 'Years Experience', value: '6+' },
-    { label: t.intro?.stats?.projects   ?? 'Projects Completed', value: '10+' },
-    { label: t.intro?.stats?.technologies ?? 'Technologies', value: '15+' },
+    { label: t.intro?.stats?.experience  ?? 'Years Experience',    value: '6+' },
+    { label: t.intro?.stats?.projects    ?? 'Projects Completed',  value: '10+' },
+    { label: t.intro?.stats?.technologies ?? 'Technologies',       value: '15+' },
   ];
 
   return (
     <section className="relative min-h-[90vh] flex items-center px-4 pt-14 overflow-hidden">
-      {/* Orbs only — no grid */}
+      {/* Orbs */}
       <div className="absolute top-[-120px] left-[-80px] w-[520px] h-[520px] rounded-full blur-[120px] opacity-[0.12] pointer-events-none"
         style={{ background: 'radial-gradient(circle, hsl(204 82% 58%) 0%, transparent 70%)', animation: 'ce-orb1 14s ease-in-out infinite alternate' }} />
       <div className="absolute bottom-[-80px] right-[-60px] w-[400px] h-[400px] rounded-full blur-[100px] opacity-[0.10] pointer-events-none"
@@ -26,25 +27,29 @@ const IntroSection = () => {
 
       <div className="container mx-auto max-w-4xl relative z-10">
         <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}
-          className="text-center space-y-8">
+          className="text-center flex flex-col items-center gap-7">
 
-          {/* Badge */}
-          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.15 }}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-semibold tracking-wider uppercase"
-            style={{ background: 'rgba(100,160,255,0.08)', border: '1px solid rgba(100,160,255,0.18)', color: 'hsl(204 82% 70%)' }}>
-            <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: 'hsl(168 50% 60%)' }} />
-            {t.intro?.badge ?? 'Full Stack Developer · Available'}
+          {/* Badge — style shared.js */}
+          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.15 }}>
+            <div style={badge}>
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'hsl(168 50% 60%)', display: 'inline-block', animation: 'pulse 2s infinite' }} />
+              {t.intro?.badge ?? 'Full Stack Developer · Available'}
+            </div>
           </motion.div>
 
-          {/* Headline */}
-          <motion.h1 initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
-            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight">
-            <span className="block" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, hsl(204 82% 74% / 0.90) 50%, hsl(168 50% 68% / 0.80) 100%)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-              Building Digital
-            </span>
-            <span className="block" style={{ background: 'linear-gradient(135deg, hsl(168 50% 68% / 0.85) 0%, hsl(204 82% 74% / 0.90) 60%, rgba(255,255,255,0.92) 100%)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-              Experiences
-            </span>
+          {/* Headline — style shared.js (gradientText + taille hero) */}
+          <motion.h1
+            initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
+            style={{
+              ...gradientText,
+              fontSize: 'clamp(2.6rem, 7vw, 5.5rem)',
+              fontWeight: 300,
+              letterSpacing: '-0.03em',
+              lineHeight: 1.1,
+            }}
+          >
+            {t.intro?.headingLine1 ?? 'Building Digital'}<br />
+            {t.intro?.headingLine2 ?? 'Experiences'}
           </motion.h1>
 
           {/* Description */}
@@ -53,10 +58,10 @@ const IntroSection = () => {
             {t.home.intro.greeting}
           </motion.p>
 
-          {/* Accent line */}
-          <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1, delay: 0.55 }}
-            className="h-px w-20 mx-auto"
-            style={{ background: 'linear-gradient(90deg, transparent, hsl(204 82% 58% / 0.5), hsl(168 50% 60% / 0.4), transparent)' }} />
+          {/* Accent line — style shared.js */}
+          <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1, delay: 0.55 }}>
+            <div style={accentLine} />
+          </motion.div>
 
           {/* Stats */}
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }}
@@ -64,7 +69,7 @@ const IntroSection = () => {
             {stats.map((s) => (
               <div key={s.label} className="px-5 py-3 rounded-xl text-center"
                 style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderTopColor: 'rgba(255,255,255,0.10)' }}>
-                <div className="text-2xl font-bold" style={{ color: 'hsl(204 82% 68%)' }}>{s.value}</div>
+                <div style={{ ...gradientText, fontSize: '1.5rem', fontWeight: 600, letterSpacing: '-0.02em' }}>{s.value}</div>
                 <div className="text-[11px] text-muted-foreground mt-0.5">{s.label}</div>
               </div>
             ))}
