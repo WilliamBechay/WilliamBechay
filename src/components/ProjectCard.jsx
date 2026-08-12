@@ -27,6 +27,21 @@ const ProjectCard = ({ project }) => {
           alt={project.imageAlt}
         />
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/8 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 z-20" />
+
+        {/* Tag posé directement sur la card, taille fixe, ne fait jamais
+            grandir le layout. max-w + truncate en filet de sécurité si un
+            tag est un jour plus long que prévu : jamais de débordement,
+            jamais de retour à la ligne qui casse la pastille. Le détail
+            complet des technologies reste accessible au survol via title. */}
+        {project.tag && (
+          <span
+            title={project.technologies?.join(', ')}
+            className="absolute top-3 left-3 z-30 max-w-[80%] truncate whitespace-nowrap rounded-full px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-md"
+            style={{ background: 'rgba(10,12,16,0.55)', border: '1px solid rgba(255,255,255,0.15)' }}
+          >
+            {project.tag}
+          </span>
+        )}
       </div>
 
       <div className="flex flex-col flex-grow p-5 md:p-6 gap-3">
