@@ -13,7 +13,7 @@ import { gradientText, sectionTitle, badge, subtitleStyle, accentLine } from '@/
 const Contact = () => {
   const { translations: t } = useLanguage();
   const { toast } = useToast();
-  const [formData, setFormData] = useState({ name: '', email: '', subject: '', reason: '', message: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', subject: '', reason: '', message: '', website: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const g = (path, fallback) => {
@@ -29,14 +29,19 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    const { name, email, subject, reason, message } = formData;
-    const { error } = await supabase.from('contact_messages').insert([{ name, email, subject, reason, message }]);
+    const { name, email, subject, reason, message, website } = formData;
+
+    const { data, error: invokeError } = await supabase.functions.invoke('contact-submit', {
+      body: { name, email, subject, reason, message, website },
+    });
+
     setIsSubmitting(false);
-    if (error) {
+
+    if (invokeError || !data?.success) {
       toast({ title: g('contact.toast.error.title', 'Error!'), description: g('contact.toast.error.description', 'Could not send. Please try again.'), variant: 'destructive' });
     } else {
       toast({ title: g('contact.toast.success.title', 'Message Sent!'), description: g('contact.toast.success.description', 'Thank you! I will get back to you shortly.') });
-      setFormData({ name: '', email: '', subject: '', reason: '', message: '' });
+      setFormData({ name: '', email: '', subject: '', reason: '', message: '', website: '' });
     }
   };
 
@@ -81,6 +86,22 @@ const Contact = () => {
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
               className="glass rounded-2xl p-6 md:p-8 mb-8">
               <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                {/* Honeypot anti-bot : champ invisible aux humains (CSS + hors flux tabulation).
+                    Un bot qui remplit tous les champs le remplira aussi ; l'Edge Function
+                    contact-submit détecte et ignore silencieusement ces soumissions. */}
+                <div style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px', overflow: 'hidden' }} aria-hidden="true">
+                  <label htmlFor="website">Website</label>
+                  <input
+                    id="website"
+                    name="website"
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={formData.website}
+                    onChange={handleChange}
+                  />
+                </div>
 
                 <div className="space-y-1.5">
                   <label htmlFor="name" className="text-xs font-medium text-muted-foreground">{g('contact.form.name', 'Name')}</label>
