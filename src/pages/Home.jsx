@@ -5,7 +5,6 @@ import Skills from '@/components/Skills';
 import CallToAction from '@/components/CallToAction';
 import IntroSection from '@/components/IntroSection';
 import { useLanguage } from '@/components/LanguageProvider';
-import WelcomeMessage from '@/components/WelcomeMessage';
 
 const Home = () => {
   const { translations } = useLanguage();
@@ -19,7 +18,6 @@ const Home = () => {
         <meta name="description" content={translations.home.meta.description} />
       </Helmet>
       <div className="flex flex-col w-full overflow-x-hidden">
-        <WelcomeMessage />
         <IntroSection />
         <Projects />
         <Skills />

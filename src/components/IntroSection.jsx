@@ -18,7 +18,7 @@ const IntroSection = () => {
   ];
 
   return (
-    <section className="relative min-h-[90vh] flex items-center px-4 pt-14 overflow-hidden">
+    <section className="relative min-h-[90vh] flex items-center px-4 overflow-hidden">
       {/* Orbs */}
       <div className="absolute top-[-120px] left-[-80px] w-[520px] h-[520px] rounded-full blur-[120px] opacity-[0.12] pointer-events-none"
         style={{ background: 'radial-gradient(circle, hsl(204 82% 58%) 0%, transparent 70%)', animation: 'ce-orb1 14s ease-in-out infinite alternate' }} />

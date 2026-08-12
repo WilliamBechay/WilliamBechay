@@ -61,7 +61,7 @@ const Contact = () => {
         <meta name="description" content={g('contact.meta.description', 'Get in touch with William Béchay.')} />
       </Helmet>
 
-      <div className="relative min-h-[calc(100vh-8rem)] py-12 md:py-16 px-4 overflow-hidden">
+      <div className="relative min-h-[calc(100vh-8rem)] pt-2 pb-12 md:pb-16 px-4 overflow-hidden">
         {/* Orbs — same as other pages */}
         <div className="absolute top-[-80px] left-[-60px] w-[400px] h-[400px] rounded-full blur-[100px] opacity-[0.10] pointer-events-none"
           style={{ background: 'radial-gradient(circle, hsl(204 82% 58%) 0%, transparent 70%)' }} />
