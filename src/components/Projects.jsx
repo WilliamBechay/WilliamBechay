@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import ProjectCard from '@/components/ProjectCard';
 import { useLanguage } from '@/components/LanguageProvider';
 import { useTheme } from '@/components/ThemeProvider';
@@ -11,31 +11,49 @@ import wiibecImage from '@/assets/wiibec.png';
 import mindovestImage from '@/assets/mindo.png';
 import docustratImage from '@/assets/docustrat.png';
 
-const TECH_PREVIEW_LIMIT = 4;
-
-// Sous-composant : liste des technologies avec repli "Voir plus" / "Voir moins".
-// Isolé du parent pour que chaque carte garde son propre état d'expansion.
-const TechStackList = ({ technologies, techTag, seeMoreLabel, seeLessLabel }) => {
+// Bloc "Tech Stack" entièrement replié par défaut : rien n'est affiché
+// tant qu'on n'a pas cliqué sur le bouton. Un clic déroule la liste des
+// technologies avec une animation de hauteur ; un second clic la referme.
+const TechStackBox = ({ technologies, techLabel, techTag, techBox, showLabel, hideLabel }) => {
   const [expanded, setExpanded] = useState(false);
-  const hasMore = technologies.length > TECH_PREVIEW_LIMIT;
-  const shown = expanded ? technologies : technologies.slice(0, TECH_PREVIEW_LIMIT);
 
   return (
-    <>
-      <div className="flex flex-wrap gap-1.5">
-        {shown.map(tech => <span key={tech} className={techTag}>{tech}</span>)}
-      </div>
-      {hasMore && (
-        <button
-          type="button"
-          onClick={() => setExpanded(v => !v)}
-          className="mt-2.5 inline-flex items-center gap-1 text-[11px] font-medium text-muted-foreground hover:text-primary transition-colors"
-        >
-          {expanded ? seeLessLabel : seeMoreLabel}
-          <ChevronDown size={12} className={cn('transition-transform duration-200', expanded && 'rotate-180')} />
-        </button>
-      )}
-    </>
+    <div className={techBox}>
+      <button
+        type="button"
+        onClick={() => setExpanded(v => !v)}
+        aria-expanded={expanded}
+        className="w-full flex items-center justify-between gap-2 group/tech"
+      >
+        <span className="flex items-center gap-2">
+          <Sparkles style={{ width: 12, height: 12, color: 'hsl(168,50%,56%)' }} />
+          <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'hsl(210,12%,45%)' }}>
+            {techLabel}
+          </span>
+        </span>
+        <span className="flex items-center gap-1 text-[11px] font-medium text-muted-foreground group-hover/tech:text-primary transition-colors">
+          {expanded ? hideLabel : showLabel}
+          <ChevronDown size={13} className={cn('transition-transform duration-200', expanded && 'rotate-180')} />
+        </span>
+      </button>
+
+      <AnimatePresence initial={false}>
+        {expanded && (
+          <motion.div
+            key="tech-list"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25, ease: 'easeInOut' }}
+            className="overflow-hidden"
+          >
+            <div className="flex flex-wrap gap-1.5 pt-3">
+              {technologies.map(tech => <span key={tech} className={techTag}>{tech}</span>)}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 };
 
@@ -45,8 +63,8 @@ const Projects = () => {
   const isDark = theme === 'dark';
   if (!t?.projects) return null;
 
-  const seeMoreLabel = t.projects.seeMore ?? 'See more';
-  const seeLessLabel = t.projects.seeLess ?? 'See less';
+  const showLabel = t.projects.showTechStack ?? 'View tech stack';
+  const hideLabel = t.projects.hideTechStack ?? 'Hide';
 
   const projects = [
     { id: 1, title: 'NexFend',        description: t.projects.nexfendDescription,   imageSrc: nexfendImage,   imageAlt: 'NexFend',        link: 'https://nexfend.com',    technologies: ['React', 'Vite', 'Capacitor', 'TypeScript', 'Supabase', 'Stripe'] },
@@ -79,18 +97,14 @@ const Projects = () => {
               <div className="flex-grow">
                 <ProjectCard project={project} />
               </div>
-              <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: index * 0.1 + 0.2 }} className={techBox}>
-                <div className="flex items-center gap-2 mb-2">
-                  <Sparkles style={{ width: 12, height: 12, color: 'hsl(168,50%,56%)' }} />
-                  <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'hsl(210,12%,45%)' }}>{techLabel}</span>
-                </div>
-                <TechStackList
-                  technologies={project.technologies}
-                  techTag={techTag}
-                  seeMoreLabel={seeMoreLabel}
-                  seeLessLabel={seeLessLabel}
-                />
-              </motion.div>
+              <TechStackBox
+                technologies={project.technologies}
+                techLabel={techLabel}
+                techTag={techTag}
+                techBox={techBox}
+                showLabel={showLabel}
+                hideLabel={hideLabel}
+              />
             </motion.div>
           ))}
         </div>
