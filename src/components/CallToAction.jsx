@@ -24,7 +24,7 @@ const CallToAction = () => {
         className="container mx-auto max-w-2xl relative z-10">
         <div className="glass rounded-2xl p-8 md:p-12 text-center flex flex-col items-center gap-6">
 
-          <h2 style={{ ...gradientText, fontSize: 'clamp(1.6rem, 3.5vw, 2.4rem)', fontWeight: 300, letterSpacing: '-0.025em', lineHeight: 1.2 }}>
+          <h2 style={{ ...gradientText, fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: 300, letterSpacing: '-0.025em', lineHeight: 1.2 }}>
             {heading}
           </h2>
 

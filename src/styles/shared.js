@@ -12,7 +12,7 @@ export const gradientText = {
 
 export const sectionTitle = {
   ...gradientText,
-  fontSize: 'clamp(1.8rem, 4vw, 3rem)',
+  fontSize: 'clamp(1.5rem, 3.2vw, 2.4rem)',
   fontWeight: 300,
   letterSpacing: '-0.03em',
   lineHeight: 1.15,

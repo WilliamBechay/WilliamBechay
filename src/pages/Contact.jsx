@@ -61,7 +61,8 @@ const Contact = () => {
         <meta name="description" content={g('contact.meta.description', 'Get in touch with William Béchay.')} />
       </Helmet>
 
-      <div className="relative min-h-[calc(100vh-8rem)] pt-2 pb-12 md:pb-16 px-4">
+      {/* pt-6/8/10 : même logique de marge responsive que la Home, sous le header */}
+      <div className="relative min-h-[calc(100vh-7rem)] pt-6 sm:pt-8 md:pt-10 pb-12 md:pb-16 px-4">
         <div className="relative z-10 container mx-auto max-w-2xl">
           <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
 

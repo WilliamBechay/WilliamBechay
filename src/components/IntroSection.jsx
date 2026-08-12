@@ -18,7 +18,9 @@ const IntroSection = () => {
   ];
 
   return (
-    <section className="relative min-h-[90vh] flex items-center px-4">
+    // pt-8/10/12 : marge minimale garantie sous le header sur mobile / tablette / desktop,
+    // indépendante du centrage vertical (qui varie selon la hauteur d'écran de chaque appareil).
+    <section className="relative min-h-[85vh] flex items-center px-4 pt-8 sm:pt-10 md:pt-12">
       <div className="container mx-auto max-w-4xl relative z-10">
         <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}
           className="text-center flex flex-col items-center gap-7">
@@ -31,12 +33,12 @@ const IntroSection = () => {
             </div>
           </motion.div>
 
-          {/* Headline — style shared.js (gradientText + taille hero) */}
+          {/* Headline — style shared.js (gradientText + taille hero, réduite) */}
           <motion.h1
             initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
             style={{
               ...gradientText,
-              fontSize: 'clamp(2.6rem, 7vw, 5.5rem)',
+              fontSize: 'clamp(2rem, 5vw, 3.6rem)',
               fontWeight: 300,
               letterSpacing: '-0.03em',
               lineHeight: 1.1,

@@ -24,7 +24,9 @@ const AppContent = () => {
       </div>
 
       <Header />
-      <main className="flex-grow overflow-x-hidden pt-16 relative">
+      {/* pt-14 = 3.5rem = h-14, la hauteur exacte du header (fixe, identique sur tous les appareils) —
+          garantit un espacement constant et prévisible entre le header et le premier élément de chaque page. */}
+      <main className="flex-grow overflow-x-hidden pt-14 relative">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/contact" element={<Contact />} />
