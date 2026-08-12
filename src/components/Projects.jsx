@@ -1,14 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import ProjectCard from '@/components/ProjectCard';
 import { useLanguage } from '@/components/LanguageProvider';
 import { useTheme } from '@/components/ThemeProvider';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { sectionTitle, badge, subtitleStyle, accentLine } from '@/styles/shared';
+import nexfendImage from '@/assets/nexfend.svg';
 import wiibecImage from '@/assets/wiibec.png';
 import mindovestImage from '@/assets/mindo.png';
 import docustratImage from '@/assets/docustrat.png';
+
+const TECH_PREVIEW_LIMIT = 4;
+
+// Sous-composant : liste des technologies avec repli "Voir plus" / "Voir moins".
+// Isolé du parent pour que chaque carte garde son propre état d'expansion.
+const TechStackList = ({ technologies, techTag, seeMoreLabel, seeLessLabel }) => {
+  const [expanded, setExpanded] = useState(false);
+  const hasMore = technologies.length > TECH_PREVIEW_LIMIT;
+  const shown = expanded ? technologies : technologies.slice(0, TECH_PREVIEW_LIMIT);
+
+  return (
+    <>
+      <div className="flex flex-wrap gap-1.5">
+        {shown.map(tech => <span key={tech} className={techTag}>{tech}</span>)}
+      </div>
+      {hasMore && (
+        <button
+          type="button"
+          onClick={() => setExpanded(v => !v)}
+          className="mt-2.5 inline-flex items-center gap-1 text-[11px] font-medium text-muted-foreground hover:text-primary transition-colors"
+        >
+          {expanded ? seeLessLabel : seeMoreLabel}
+          <ChevronDown size={12} className={cn('transition-transform duration-200', expanded && 'rotate-180')} />
+        </button>
+      )}
+    </>
+  );
+};
 
 const Projects = () => {
   const { translations: t } = useLanguage();
@@ -16,10 +45,14 @@ const Projects = () => {
   const isDark = theme === 'dark';
   if (!t?.projects) return null;
 
+  const seeMoreLabel = t.projects.seeMore ?? 'See more';
+  const seeLessLabel = t.projects.seeLess ?? 'See less';
+
   const projects = [
-    { id: 1, title: 'Wiibec.com',     description: t.projects.wiibecDescription,    imageSrc: wiibecImage,    imageAlt: 'Wiibec.com',     link: 'https://wiibec.com',     technologies: ['React', 'Vite', 'Tailwind CSS', 'Node.js', 'Supabase', 'Stripe'] },
-    { id: 2, title: 'Mindovest.com',  description: t.projects.mindovestDescription,  imageSrc: mindovestImage, imageAlt: 'Mindovest.com',  link: 'https://mindovest.com',  technologies: ['React', 'Vite', 'Tailwind CSS', 'Capacitor', 'Supabase', 'TypeScript'] },
+    { id: 1, title: 'NexFend',        description: t.projects.nexfendDescription,   imageSrc: nexfendImage,   imageAlt: 'NexFend',        link: 'https://nexfend.com',    technologies: ['React', 'Vite', 'Capacitor', 'TypeScript', 'Supabase', 'Stripe'] },
+    { id: 2, title: 'Wiibec.com',     description: t.projects.wiibecDescription,    imageSrc: wiibecImage,    imageAlt: 'Wiibec.com',     link: 'https://wiibec.com',     technologies: ['React', 'Vite', 'Tailwind CSS', 'Node.js', 'Supabase', 'Stripe'] },
     { id: 3, title: 'Docustrat.com',  description: t.projects.docustratDescription,  imageSrc: docustratImage, imageAlt: 'Docustrat.com',  link: 'https://docustrat.com',  technologies: ['React', 'TypeScript', 'Supabase', 'AI/LLM', 'Tailwind CSS'] },
+    { id: 4, title: 'Mindovest.com',  description: t.projects.mindovestDescription,  imageSrc: mindovestImage, imageAlt: 'Mindovest.com',  link: 'https://mindovest.com',  technologies: ['React', 'Vite', 'Tailwind CSS', 'Capacitor', 'Supabase', 'TypeScript'] },
   ];
 
   const techTag = cn('px-2.5 py-1 text-xs font-medium rounded-full border', isDark ? 'bg-white/[0.04] border-white/[0.08] text-[rgba(255,255,255,0.70)]' : 'bg-black/[0.04] border-black/[0.08] text-[rgba(0,0,0,0.60)]');
@@ -39,7 +72,8 @@ const Projects = () => {
           <div style={accentLine} />
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+        {/* 1 colonne (mobile) -> 2 colonnes (tablette) -> 4 colonnes (desktop) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 items-stretch">
           {projects.map((project, index) => (
             <motion.div key={project.id} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: index * 0.1 }} className="flex flex-col gap-4">
               <div className="flex-grow">
@@ -50,9 +84,12 @@ const Projects = () => {
                   <Sparkles style={{ width: 12, height: 12, color: 'hsl(168,50%,56%)' }} />
                   <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'hsl(210,12%,45%)' }}>{techLabel}</span>
                 </div>
-                <div className="flex flex-wrap gap-1.5">
-                  {project.technologies.map(tech => <span key={tech} className={techTag}>{tech}</span>)}
-                </div>
+                <TechStackList
+                  technologies={project.technologies}
+                  techTag={techTag}
+                  seeMoreLabel={seeMoreLabel}
+                  seeLessLabel={seeLessLabel}
+                />
               </motion.div>
             </motion.div>
           ))}
