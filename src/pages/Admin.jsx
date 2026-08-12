@@ -8,37 +8,46 @@ import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/lib/customSupabaseClient';
 import { LogOut } from 'lucide-react';
 
+const SESSION_STORAGE_KEY = 'admin_session_token';
+
 const Admin = () => {
   const { translations } = useLanguage();
   const { toast } = useToast();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [token, setToken] = useState(() => sessionStorage.getItem(SESSION_STORAGE_KEY) || null);
   const [password, setPassword] = useState('');
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isVerifying, setIsVerifying] = useState(false);
 
+  const isAuthenticated = !!token;
+
   useEffect(() => {
     if (isAuthenticated) {
       fetchMessages();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated]);
 
   const fetchMessages = async () => {
     setLoading(true);
-    const { data, error } = await supabase
-      .from('contact_messages')
-      .select('*')
-      .order('created_at', { ascending: false });
+    const { data, error } = await supabase.functions.invoke('admin-messages', {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
-    if (error) {
+    if (error || data?.error) {
+      // Session invalide ou expirée -> on déconnecte proprement.
+      if (error?.context?.status === 401 || data?.error) {
+        handleLogout();
+      }
       toast({
         title: translations.contact.toast.error.title,
         description: 'Failed to fetch messages.',
         variant: 'destructive',
       });
-      console.error('Error fetching messages:', error);
+      console.error('Error fetching messages:', error || data?.error);
     } else {
-      setMessages(data);
+      setMessages(data?.messages || []);
     }
     setLoading(false);
   };
@@ -47,10 +56,10 @@ const Admin = () => {
     e.preventDefault();
     setIsVerifying(true);
 
-    const { data, error } = await supabase.functions.invoke('verify-admin-password', {
+    const { data, error } = await supabase.functions.invoke('admin-login', {
       body: { password },
     });
-    
+
     setIsVerifying(false);
 
     if (error || !data?.success) {
@@ -61,12 +70,15 @@ const Admin = () => {
       });
       console.error('Login error:', error || data?.error);
     } else {
-      setIsAuthenticated(true);
+      sessionStorage.setItem(SESSION_STORAGE_KEY, data.token);
+      setToken(data.token);
+      setPassword('');
     }
   };
 
   const handleLogout = () => {
-    setIsAuthenticated(false);
+    sessionStorage.removeItem(SESSION_STORAGE_KEY);
+    setToken(null);
     setPassword('');
     setMessages([]);
   };
