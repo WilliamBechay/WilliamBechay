@@ -16,7 +16,7 @@ const CallToAction = () => {
   const tagline  = t.cta?.tagline  ?? t?.home?.tagline ?? "Can't build it, can't understand it.";
 
   return (
-    <section className="relative py-16 md:py-24 px-4 overflow-hidden bg-background">
+    <section className="relative py-14 md:py-20 px-4">
       <div className="absolute inset-0 pointer-events-none"
         style={{ background: 'radial-gradient(ellipse 60% 50% at 50% 50%, hsl(204 82% 58% / 0.05) 0%, transparent 70%)' }} />
 

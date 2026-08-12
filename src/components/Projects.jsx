@@ -29,13 +29,10 @@ const Projects = () => {
   const techLabel  = t.projects.techStack ?? 'Tech Stack';
 
   return (
-    <section id="projects" className="relative py-16 md:py-24 px-4 overflow-hidden bg-background">
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-3xl pointer-events-none" />
-
+    <section id="projects" className="relative py-14 md:py-20 px-4">
       <div className="container mx-auto max-w-7xl relative z-10">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}
-          className="text-center mb-12 md:mb-16 flex flex-col items-center gap-4">
+          className="text-center mb-10 md:mb-14 flex flex-col items-center gap-4">
           <div style={badge}><Sparkles style={{ width: 12, height: 12 }} />{badgeLabel}</div>
           <h2 style={sectionTitle}>{t.projects.heading}</h2>
           {t.projects.subheading && <p style={subtitleStyle}>{t.projects.subheading}</p>}

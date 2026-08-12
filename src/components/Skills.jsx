@@ -12,13 +12,10 @@ const Skills = () => {
   if (!t?.skills) return null;
 
   return (
-    <section id="skills" className="relative py-16 md:py-24 px-4 overflow-hidden bg-background">
-      <div className="absolute top-1/4 right-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/4 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
-
+    <section id="skills" className="relative py-14 md:py-20 px-4">
       <div className="container mx-auto relative z-10">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}
-          className="text-center mb-12 md:mb-16 flex flex-col items-center gap-4">
+          className="text-center mb-10 md:mb-14 flex flex-col items-center gap-4">
           <div style={badge}>
             <span style={{ fontSize: 10 }}>⚙</span>
             {t.skills.badge ?? 'Technical Expertise'}
@@ -28,7 +25,7 @@ const Skills = () => {
           <div style={accentLine} />
         </motion.div>
 
-        <div className="flex flex-wrap justify-center gap-6 md:gap-10 lg:gap-14 mb-12 md:mb-16">
+        <div className="flex flex-wrap justify-center gap-6 md:gap-10 lg:gap-14 mb-10 md:mb-14">
           {skills.map((skill, index) => (
             <motion.div
               key={skill.name}

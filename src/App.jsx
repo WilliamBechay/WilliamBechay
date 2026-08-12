@@ -12,9 +12,19 @@ import { SupabaseAuthProvider } from '@/contexts/SupabaseAuthContext';
 
 const AppContent = () => {
   return (
-    <div className="min-h-screen bg-background text-foreground transition-colors duration-300 flex flex-col">
+    <div className="min-h-screen bg-background text-foreground transition-colors duration-300 flex flex-col relative">
+      {/* Fond ambiant global — unique source de vérité, fixe, derrière tout.
+          Évite les coupures visibles entre sections (chaque section avait avant son propre halo flou
+          enfermé dans overflow-hidden, ce qui créait une rupture nette à chaque frontière de section). */}
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div className="absolute top-[-15%] left-[-10%] w-[520px] h-[520px] rounded-full blur-[130px] opacity-[0.10]"
+          style={{ background: 'radial-gradient(circle, hsl(204 82% 58%) 0%, transparent 70%)', animation: 'ce-orb1 16s ease-in-out infinite alternate' }} />
+        <div className="absolute bottom-[-15%] right-[-10%] w-[440px] h-[440px] rounded-full blur-[120px] opacity-[0.08]"
+          style={{ background: 'radial-gradient(circle, hsl(168 50% 60%) 0%, transparent 70%)', animation: 'ce-orb2 20s ease-in-out infinite alternate' }} />
+      </div>
+
       <Header />
-      <main className="flex-grow overflow-x-hidden pt-16">
+      <main className="flex-grow overflow-x-hidden pt-16 relative">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/contact" element={<Contact />} />

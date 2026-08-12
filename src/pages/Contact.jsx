@@ -61,13 +61,7 @@ const Contact = () => {
         <meta name="description" content={g('contact.meta.description', 'Get in touch with William Béchay.')} />
       </Helmet>
 
-      <div className="relative min-h-[calc(100vh-8rem)] pt-2 pb-12 md:pb-16 px-4 overflow-hidden">
-        {/* Orbs — same as other pages */}
-        <div className="absolute top-[-80px] left-[-60px] w-[400px] h-[400px] rounded-full blur-[100px] opacity-[0.10] pointer-events-none"
-          style={{ background: 'radial-gradient(circle, hsl(204 82% 58%) 0%, transparent 70%)' }} />
-        <div className="absolute bottom-[-60px] right-[-40px] w-[320px] h-[320px] rounded-full blur-[90px] opacity-[0.08] pointer-events-none"
-          style={{ background: 'radial-gradient(circle, hsl(168 50% 60%) 0%, transparent 70%)' }} />
-
+      <div className="relative min-h-[calc(100vh-8rem)] pt-2 pb-12 md:pb-16 px-4">
         <div className="relative z-10 container mx-auto max-w-2xl">
           <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
 
