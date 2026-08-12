@@ -4,10 +4,10 @@ import ProjectCard from '@/components/ProjectCard';
 import { useLanguage } from '@/components/LanguageProvider';
 import { Sparkles } from 'lucide-react';
 import { sectionTitle, badge, subtitleStyle, accentLine } from '@/styles/shared';
-import nexfendImage from '@/assets/nexfend.svg';
+import nexfendImage from '@/assets/nexfend.png';
 import wiibecImage from '@/assets/wiibec.png';
 import mindovestImage from '@/assets/mindo.png';
-import docustratImage from '@/assets/docustrat.png';
+import docustratImage from '@/assets/Docustrat.png';
 
 const Projects = () => {
   const { translations: t } = useLanguage();
