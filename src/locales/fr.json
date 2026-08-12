@@ -32,6 +32,8 @@
     "subheading": "",
     "badge": "Travaux récents",
     "techStack": "Stack technique",
+    "showTechStack": "Voir la stack technique",
+    "hideTechStack": "Masquer",
     "visitProject": "Voir le projet",
     "seeMore": "Voir plus",
     "seeLess": "Voir moins",
@@ -44,6 +46,8 @@
     "heading": "Compétences",
     "badge": "Expertise technique",
     "subheading": "Un éventail de technologies et d'outils que je maîtrise pour construire des applications web complètes et évolutives.",
+    "showButton": "Afficher la stack technique",
+    "hideButton": "Masquer",
     "contactButton": "Discutons de votre projet",
     "categories": {
       "frontend": "Développement Frontend",

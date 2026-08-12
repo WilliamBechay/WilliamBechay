@@ -32,6 +32,8 @@
     "subheading": "",
     "badge": "Featured Work",
     "techStack": "Tech Stack",
+    "showTechStack": "View tech stack",
+    "hideTechStack": "Hide",
     "visitProject": "Visit project",
     "seeMore": "See more",
     "seeLess": "See less",
@@ -44,6 +46,8 @@
     "heading": "Skills",
     "badge": "Technical Expertise",
     "subheading": "A range of technologies and tools I master to build complete and scalable web applications.",
+    "showButton": "Show tech stack",
+    "hideButton": "Hide",
     "contactButton": "Let's discuss your project",
     "categories": {
       "frontend": "Frontend Development",
