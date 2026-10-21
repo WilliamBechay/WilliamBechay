@@ -3,34 +3,33 @@ import { Slot } from '@radix-ui/react-slot';
 import { cva } from 'class-variance-authority';
 import React from 'react';
 
-const buttonVariants = cva(
-	'inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
-	{
-		variants: {
-			variant: {
-				default: 'bg-primary text-primary-foreground hover:bg-primary/90',
-				destructive:
-          'bg-destructive text-destructive-foreground hover:bg-destructive/90',
-				outline:
-          'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
-				secondary:
-          'bg-secondary text-secondary-foreground hover:bg-secondary/80',
-				ghost: 'hover:bg-accent hover:text-accent-foreground',
-				link: 'text-primary underline-offset-4 hover:underline',
-			},
-			size: {
-				default: 'h-10 px-4 py-2',
-				sm: 'h-9 rounded-md px-3',
-				lg: 'h-11 rounded-md px-8',
-				icon: 'h-10 w-10',
-			},
+// Les variantes pointent vers la famille .btn de src/index.css, pour que
+// ce composant et les boutons ecrits a la main dans les pages soient le
+// meme objet. Avant, il y avait quatre styles de bouton sur le site —
+// deux degrades differents, une pastille translucide et celui-ci — et
+// aucun ne faisait la cible tactile de 44px.
+const buttonVariants = cva('btn', {
+	variants: {
+		variant: {
+			default: 'btn-primary',
+			destructive: 'btn-destructive',
+			outline: 'btn-secondary',
+			secondary: 'btn-secondary',
+			ghost: 'btn-ghost',
+			link: 'btn-link',
 		},
-		defaultVariants: {
-			variant: 'default',
-			size: 'default',
+		size: {
+			default: '',
+			sm: 'btn-sm',
+			lg: 'btn-lg',
+			icon: 'btn-icon',
 		},
 	},
-);
+	defaultVariants: {
+		variant: 'default',
+		size: 'default',
+	},
+});
 
 const Button = React.forwardRef(({ className, variant, size, asChild = false, ...props }, ref) => {
 	const Comp = asChild ? Slot : 'button';

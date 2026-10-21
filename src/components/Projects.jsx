@@ -1,9 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import ProjectCard from '@/components/ProjectCard';
+import SectionHead from '@/components/SectionHead';
 import { useLanguage } from '@/components/LanguageProvider';
 import { Sparkles } from 'lucide-react';
-import { sectionTitle, badge, subtitleStyle, accentLine } from '@/styles/shared';
 import nexfendImage from '@/assets/nexfend.png';
 import wiibecImage from '@/assets/wiibec.png';
 import mindovestImage from '@/assets/mindo.png';
@@ -13,13 +13,11 @@ const Projects = () => {
   const { translations: t } = useLanguage();
   if (!t?.projects) return null;
 
-  // Un seul tag court par projet (catégorie + plateforme), affiché en
-  // overlay fixe sur l'image de la card. Remplace l'ancienne liste de
-  // technologies dépliable : plus de changement de hauteur au clic, plus
-  // de texte qui déborde d'un pill rounded-full trop étroit pour du texte
-  // long ("Tailwind CSS", "TypeScript"...). Le detail complet des
-  // technologies reste disponible via l'attribut title (tooltip natif au
-  // survol), sans jamais affecter le layout.
+  // Un seul tag court par projet (categorie + plateforme), affiche en
+  // overlay fixe sur l-image de la carte. Remplace l-ancienne liste de
+  // technologies depliable : plus de changement de hauteur au clic, plus
+  // de texte qui deborde d-une pastille trop etroite. Le detail complet
+  // reste disponible via l-attribut title.
   const projects = [
     {
       id: 1, title: 'NexFend', description: t.projects.nexfendDescription,
@@ -43,23 +41,29 @@ const Projects = () => {
     },
   ];
 
-  const badgeLabel = t.projects.badge ?? 'Featured Work';
-
   return (
-    <section id="projects" className="relative py-14 md:py-20 px-4">
+    <section id="projects" className="relative px-6" style={{ paddingTop: 'clamp(72px, 10vw, 128px)', paddingBottom: 'clamp(72px, 10vw, 128px)' }}>
       <div className="container mx-auto max-w-7xl relative z-10">
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}
-          className="text-center mb-10 md:mb-14 flex flex-col items-center gap-4">
-          <div style={badge}><Sparkles style={{ width: 12, height: 12 }} />{badgeLabel}</div>
-          <h2 style={sectionTitle}>{t.projects.heading}</h2>
-          {t.projects.subheading && <p style={subtitleStyle}>{t.projects.subheading}</p>}
-          <div style={accentLine} />
-        </motion.div>
+        <SectionHead
+          eyebrow={t.projects.badge ?? 'Featured Work'}
+          icon={<Sparkles size={12} />}
+          title={t.projects.heading}
+          subtitle={t.projects.subheading || null}
+        />
 
-        {/* 1 colonne (mobile) -> 2 colonnes (tablette) -> 4 colonnes (desktop) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 items-stretch">
+        <div
+          className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 items-stretch"
+          style={{ marginTop: 'clamp(40px, 5vw, 64px)', gap: 'clamp(20px, 2.2vw, 28px)' }}
+        >
           {projects.map((project, index) => (
-            <motion.div key={project.id} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: index * 0.1 }}>
+            <motion.div
+              key={project.id}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ duration: 0.55, delay: index * 0.07, ease: [0.32, 0.72, 0, 1] }}
+              className="h-full"
+            >
               <ProjectCard project={project} />
             </motion.div>
           ))}

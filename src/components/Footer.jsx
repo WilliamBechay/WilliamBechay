@@ -1,61 +1,58 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, Github, Linkedin, Mail } from 'lucide-react';
+import { Github, Linkedin, Mail, Heart } from 'lucide-react';
 import { useLanguage } from '@/components/LanguageProvider';
-import { motion } from 'framer-motion';
-import { gradientText } from '@/styles/shared';
 
 const Footer = () => {
   const { translations: t } = useLanguage();
   const year = new Date().getFullYear();
 
   const socials = [
-    { icon: Github,   href: 'https://github.com/WilliamBechay', label: 'GitHub' },
-    { icon: Linkedin, href: 'https://linkedin.com',             label: 'LinkedIn' },
-    { icon: Mail,     href: '/contact',                         label: 'Contact' },
+    { icon: Github,   href: 'https://github.com/williambechay',              label: 'GitHub' },
+    { icon: Linkedin, href: 'https://www.linkedin.com/in/william-bechay',    label: 'LinkedIn' },
+    { icon: Mail,     href: '/contact',                                      label: 'Contact' },
   ];
 
   return (
-    <footer className="relative border-t border-border/40 overflow-hidden bg-background">
-      <div className="container mx-auto px-4 py-10 relative z-10">
-        <div className="flex flex-col items-center gap-6">
+    <footer className="relative" style={{ borderTop: '1px solid var(--hairline)', background: 'hsl(var(--background))' }}>
+      <div className="container mx-auto px-6" style={{ paddingTop: 56, paddingBottom: 56 }}>
+        <div className="flex flex-col items-center gap-7">
 
           <div className="text-center">
-            <span style={{ ...gradientText, fontSize: '1.2rem', fontWeight: 300, letterSpacing: '-0.02em' }}>
+            <p style={{ fontSize: 'var(--fs-title-3)', fontWeight: 600, letterSpacing: '-0.02em', color: 'hsl(var(--foreground))' }}>
               William Bechay
-            </span>
-            <p className="text-xs text-muted-foreground mt-1" style={{ letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+            </p>
+            <p className="t-caption" style={{ marginTop: 6, letterSpacing: '0.1em', textTransform: 'uppercase', fontSize: 11 }}>
               {t?.footer?.role ?? 'Full Stack Developer'}
             </p>
           </div>
 
           <div className="flex items-center gap-2">
-            {socials.map(s => (
-              <motion.a
+            {socials.map((s) => (
+              <a
                 key={s.label}
                 href={s.href}
                 target={s.href.startsWith('http') ? '_blank' : '_self'}
                 rel="noopener noreferrer"
-                whileHover={{ y: -3 }}
-                className="p-2.5 rounded-xl glass text-muted-foreground hover:text-primary transition-colors duration-200"
+                className="social-link"
                 aria-label={s.label}
               >
-                <s.icon style={{ width: 15, height: 15 }} />
-              </motion.a>
+                <s.icon size={17} />
+              </a>
             ))}
           </div>
 
-          <div className="w-32 h-px" style={{ background: 'linear-gradient(90deg, transparent, hsl(210,14%,22%), transparent)' }} />
+          <div className="w-full" style={{ maxWidth: 380, height: 1, background: 'var(--hairline)' }} />
 
-          <div className="flex items-center gap-3 text-xs text-muted-foreground">
-            <span>© {year} William Bechay</span>
-            <span className="opacity-30">·</span>
-            <span className="flex items-center gap-1">
+          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 t-caption">
+            <span>&copy; {year} William Bechay</span>
+            <span aria-hidden="true" style={{ opacity: 0.4 }}>&middot;</span>
+            <span className="inline-flex items-center gap-1.5">
               {t?.footer?.crafted_with ?? 'Crafted with'}
-              <Heart style={{ width: 11, height: 11, color: 'hsl(0,70%,60%)', fill: 'hsl(0,70%,60%)' }} />
+              <Heart size={12} style={{ color: 'hsl(352 70% 58%)', fill: 'hsl(352 70% 58%)' }} />
             </span>
-            <span className="opacity-30">·</span>
-            <Link to="/admin" className="hover:text-primary transition-colors">
+            <span aria-hidden="true" style={{ opacity: 0.4 }}>&middot;</span>
+            <Link to="/admin" className="footer-link">
               {t?.header?.admin ?? 'Admin'}
             </Link>
           </div>

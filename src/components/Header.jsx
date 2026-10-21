@@ -20,7 +20,8 @@ const Header = () => {
   const activeSection = useScrollSpy(sectionIds, { rootMargin: '-50% 0px -50% 0px' });
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    const handleScroll = () => setIsScrolled(window.scrollY > 8);
+    handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -53,122 +54,112 @@ const Header = () => {
     return location.pathname === '/' && activeSection === pathOrId;
   };
 
+  // Un item de nav est un bouton de la meme famille que tous les autres :
+  // il herite donc de la cible tactile de 44px sur un pointeur grossier.
   const navItemClass = (pathOrId) => cn(
-    'relative px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200',
-    isActive(pathOrId)
-      ? 'text-foreground bg-white/[0.06] border border-white/[0.08]'
-      : 'text-muted-foreground hover:text-foreground hover:bg-white/[0.04]'
+    'btn btn-ghost btn-sm',
+    isActive(pathOrId) && 'is-active'
   );
 
-  const iconBtnClass = 'flex items-center justify-center w-7 h-7 rounded-md text-muted-foreground hover:text-foreground hover:bg-white/[0.05] transition-colors';
+  const navItemStyle = (pathOrId) => isActive(pathOrId)
+    ? { background: 'var(--surface-2)', color: 'hsl(var(--foreground))', fontWeight: 600 }
+    : undefined;
 
   if (!translations) return null;
 
   return (
     <header
-      className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-        isScrolled
-          ? 'bg-[#111318] border-b border-white/[0.07] shadow-[0_1px_0_rgba(255,255,255,0.05)]'
-          : 'bg-transparent'
-      )}
+      className="fixed top-0 left-0 right-0 z-50"
+      style={{
+        height: 'var(--nav-h)',
+        // La barre est TOUJOURS depolie — c-est elle qui fait flotter la
+        // page dessous. Seul le filet du bas apparait au defilement, pour
+        // separer la barre du contenu une fois qu-il passe derriere.
+        background: 'var(--chrome-bg)',
+        backdropFilter: 'blur(24px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+        borderBottom: `1px solid ${isScrolled ? 'var(--hairline)' : 'transparent'}`,
+        transition: 'border-color var(--dur) var(--ease)',
+      }}
     >
-      <nav className="container mx-auto px-4 h-14 flex items-center justify-between">
+      <nav className="container mx-auto px-4 h-full flex items-center justify-between gap-2">
 
-        {/* Logo — plain text, no extra decoration */}
-        <Link to="/" onClick={() => setIsMenuOpen(false)}>
-          <motion.span
-            initial={{ opacity: 0, x: -16 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.4 }}
-            className="text-sm font-semibold text-foreground/90 tracking-tight"
-          >
-            William Bechay
-          </motion.span>
+        <Link
+          to="/"
+          onClick={() => setIsMenuOpen(false)}
+          className="brand-link shrink-0 rounded-lg"
+          style={{ fontSize: 'var(--fs-callout)', fontWeight: 600, letterSpacing: '-0.015em', color: 'hsl(var(--foreground))' }}
+        >
+          William Bechay
         </Link>
 
-        {/* Desktop nav */}
+        {/* Nav bureau */}
         <div className="hidden md:flex items-center gap-1">
-          <button onClick={() => scrollToSection('projects')} className={navItemClass('projects')}>
+          <button onClick={() => scrollToSection('projects')} className={navItemClass('projects')} style={navItemStyle('projects')}>
             {translations.header.projects}
           </button>
-          <button onClick={() => handleNavigate('/contact')} className={navItemClass('/contact')}>
+          <button onClick={() => handleNavigate('/contact')} className={navItemClass('/contact')} style={navItemStyle('/contact')}>
             {translations.header.contact}
           </button>
 
-          <div className="w-px h-4 bg-white/[0.08] mx-2" />
+          <div className="w-px h-4 mx-2" style={{ background: 'var(--hairline-strong)' }} />
 
-          <button onClick={toggleLanguage} className={iconBtnClass} aria-label="Toggle language">
-            <Languages className="w-4 h-4" />
+          <button onClick={toggleLanguage} className="btn btn-ghost btn-sm hit" style={{ padding: 0, width: 38 }} aria-label="Toggle language">
+            <Languages size={16} />
           </button>
-          <button onClick={handleToggleTheme} className={iconBtnClass} aria-label="Toggle theme">
+          <button onClick={handleToggleTheme} className="btn btn-ghost btn-sm hit" style={{ padding: 0, width: 38 }} aria-label="Toggle theme">
             <AnimatePresence mode="wait" initial={false}>
-              <motion.div
+              <motion.span
                 key={theme}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.15 }}
+                className="flex"
               >
-                {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-              </motion.div>
+                {isDark ? <Sun size={16} /> : <Moon size={16} />}
+              </motion.span>
             </AnimatePresence>
           </button>
         </div>
 
-        {/* Mobile controls */}
-        <div className="flex md:hidden items-center gap-1">
-          <button onClick={toggleLanguage} className={iconBtnClass} aria-label="Toggle language">
-            <Languages className="w-4 h-4" />
+        {/* Commandes mobiles */}
+        <div className="flex md:hidden items-center gap-0.5">
+          <button onClick={toggleLanguage} className="btn btn-ghost btn-sm hit" style={{ padding: 0, width: 40 }} aria-label="Toggle language">
+            <Languages size={17} />
           </button>
-          <button onClick={handleToggleTheme} className={iconBtnClass} aria-label="Toggle theme">
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.div
-                key={theme}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.15 }}
-              >
-                {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-              </motion.div>
-            </AnimatePresence>
+          <button onClick={handleToggleTheme} className="btn btn-ghost btn-sm hit" style={{ padding: 0, width: 40 }} aria-label="Toggle theme">
+            {isDark ? <Sun size={17} /> : <Moon size={17} />}
           </button>
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className={iconBtnClass}
+            className="btn btn-ghost btn-sm hit"
+            style={{ padding: 0, width: 40 }}
             aria-label="Toggle menu"
+            aria-expanded={isMenuOpen}
           >
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.div
-                key={isMenuOpen ? 'close' : 'open'}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.15 }}
-              >
-                {isMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
-              </motion.div>
-            </AnimatePresence>
+            {isMenuOpen ? <X size={17} /> : <Menu size={17} />}
           </button>
         </div>
       </nav>
 
-      {/* Mobile menu */}
+      {/* Menu mobile — fond opaque : un panneau translucide pose sur du
+          texte qui defile derriere lui n-est plus lisible. */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.2 }}
-            className="md:hidden overflow-hidden border-t border-white/[0.06] bg-[#111318]"
+            transition={{ duration: 0.22, ease: [0.32, 0.72, 0, 1] }}
+            className="md:hidden overflow-hidden"
+            style={{ background: 'var(--chrome-solid)', borderTop: '1px solid var(--hairline)', boxShadow: 'var(--shadow-2)' }}
           >
-            <div className="container mx-auto px-4 py-3 flex flex-col gap-1">
-              <button onClick={() => scrollToSection('projects')} className={navItemClass('projects')}>
+            <div className="container mx-auto px-4 py-2 flex flex-col">
+              <button onClick={() => scrollToSection('projects')} className="btn btn-ghost" style={{ justifyContent: 'flex-start', ...navItemStyle('projects') }}>
                 {translations.header.projects}
               </button>
-              <button onClick={() => handleNavigate('/contact')} className={navItemClass('/contact')}>
+              <button onClick={() => handleNavigate('/contact')} className="btn btn-ghost" style={{ justifyContent: 'flex-start', ...navItemStyle('/contact') }}>
                 {translations.header.contact}
               </button>
             </div>

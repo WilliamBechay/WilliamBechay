@@ -1,105 +1,104 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/components/LanguageProvider';
-import { Activity, Shield, ArrowDown } from 'lucide-react';
-import { badge, accentLine, gradientText } from '@/styles/shared';
+import { ArrowDown, MapPin } from 'lucide-react';
+
+const rise = (delay) => ({
+  initial: { opacity: 0, y: 16 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.6, delay, ease: [0.32, 0.72, 0, 1] },
+});
 
 const IntroSection = () => {
   const { translations: t } = useLanguage();
+  const navigate = useNavigate();
   if (!t?.home?.intro) return null;
 
   const scrollToProjects = () =>
     document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
 
   const stats = [
-    { label: t.intro?.stats?.experience  ?? 'Years Experience',    value: '6+' },
-    { label: t.intro?.stats?.projects    ?? 'Projects Completed',  value: '10+' },
+    { label: t.intro?.stats?.experience   ?? 'Years Experience',   value: '6+' },
+    { label: t.intro?.stats?.projects     ?? 'Projects Completed', value: '10+' },
     { label: t.intro?.stats?.technologies ?? 'Technologies',       value: '15+' },
   ];
 
   return (
-    // pt-8/10/12 : marge minimale garantie sous le header sur mobile / tablette / desktop,
-    // indépendante du centrage vertical (qui varie selon la hauteur d'écran de chaque appareil).
-    <section className="relative min-h-[85vh] flex items-center px-4 pt-8 sm:pt-10 md:pt-12">
-      <div className="container mx-auto max-w-4xl relative z-10">
-        <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}
-          className="text-center flex flex-col items-center gap-7">
+    <section className="hero-section relative flex items-center px-6">
+      <div className="container mx-auto max-w-3xl relative z-10">
+        <div className="text-center flex flex-col items-center">
 
-          {/* Badge — style shared.js */}
-          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.15 }}>
-            <div style={badge}>
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'hsl(168 50% 60%)', display: 'inline-block', animation: 'pulse 2s infinite' }} />
-              {t.intro?.badge ?? 'Full Stack Developer · Available'}
-            </div>
+          <motion.div {...rise(0.05)}>
+            <span className="eyebrow">
+              <span
+                className="animate-soft-pulse"
+                style={{ width: 6, height: 6, borderRadius: '50%', background: 'currentColor', display: 'inline-block' }}
+              />
+              {t.intro?.badge ?? 'Full Stack Developer'}
+            </span>
           </motion.div>
 
-          {/* Headline — style shared.js (gradientText + taille hero, réduite) */}
-          <motion.h1
-            initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
-            style={{
-              ...gradientText,
-              fontSize: 'clamp(2rem, 5vw, 3.6rem)',
-              fontWeight: 300,
-              letterSpacing: '-0.03em',
-              lineHeight: 1.1,
-            }}
-          >
-            {t.intro?.headingLine1 ?? 'Building Digital'}<br />
-            {t.intro?.headingLine2 ?? 'Experiences'}
+          {/* Le degrade de marque tient sur UN mot. Un titre entier en
+              degrade perd sa hierarchie : il n-a plus ni noir ni blanc a
+              opposer au texte qui le suit. */}
+          <motion.h1 {...rise(0.12)} className="t-display hero-title">
+            {t.intro?.headingLine1 ?? 'Building Digital'}
+            <br />
+            <span className="t-gradient">{t.intro?.headingLine2 ?? 'Experiences'}</span>
           </motion.h1>
 
-          {/* Description */}
-          <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
-            className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          <motion.p {...rise(0.2)} className="t-lead hero-lead">
             {t.home.intro.greeting}
           </motion.p>
 
-          {/* Accent line — style shared.js */}
-          <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1, delay: 0.55 }}>
-            <div style={accentLine} />
-          </motion.div>
-
-          {/* Stats */}
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }}
-            className="flex flex-wrap justify-center gap-3">
-            {stats.map((s) => (
-              <div key={s.label} className="px-5 py-3 rounded-xl text-center"
-                style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderTopColor: 'rgba(255,255,255,0.10)' }}>
-                <div style={{ ...gradientText, fontSize: '1.5rem', fontWeight: 600, letterSpacing: '-0.02em' }}>{s.value}</div>
-                <div className="text-[11px] text-muted-foreground mt-0.5">{s.label}</div>
-              </div>
-            ))}
-          </motion.div>
-
-          {/* CTA button */}
-          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.85 }}>
-            <button
-              onClick={scrollToProjects}
-              className="group inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-medium transition-all duration-200 hover:gap-3"
-              style={{ background: 'rgba(100,160,255,0.10)', border: '1px solid rgba(100,160,255,0.20)', color: 'hsl(204 82% 70%)' }}
-            >
-              {t.intro?.scrollCta ?? t.hero?.button ?? 'View my projects'}
-              <ArrowDown size={12} className="group-hover:translate-y-0.5 transition-transform" />
+          <motion.div {...rise(0.28)} className="hero-actions flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+            <button onClick={scrollToProjects} className="btn btn-primary w-full sm:w-auto">
+              {t.intro?.scrollCta ?? 'View my projects'}
+              <ArrowDown size={16} className="btn-arrow btn-arrow-down" />
+            </button>
+            <button onClick={() => navigate('/contact')} className="btn btn-secondary w-full sm:w-auto">
+              {t.header?.contact ?? 'Contact'}
             </button>
           </motion.div>
 
-          {/* Status row */}
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }}
-            className="flex items-center justify-center gap-4 text-[11px] text-muted-foreground">
-            <div className="flex items-center gap-1.5">
-              <Activity size={10} />
-              <span>{t.intro?.status?.openToWork ?? 'Open to work'}</span>
-              <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: 'hsl(168 50% 60%)' }} />
-              <span style={{ color: 'hsl(168 50% 65%)' }}>{t.intro?.status?.active ?? 'Active'}</span>
-            </div>
-            <div className="w-px h-3 bg-white/10" />
-            <div className="flex items-center gap-1.5">
-              <Shield size={10} />
-              <span>{t.intro?.status?.location ?? 'Montreal, QC'}</span>
-            </div>
+          {/* Chiffres : une rangee separee par des filets, pas trois
+              pastilles. Le chiffre est une donnee — il se lit en pleine
+              couleur, a sa taille, sans decor. */}
+          <motion.dl
+            {...rise(0.36)}
+            className="hero-stats grid grid-cols-3 w-full"
+          >
+            {stats.map((s, i) => (
+              <div
+                key={s.label}
+                className="text-center px-2"
+                style={i > 0 ? { borderLeft: '1px solid var(--hairline)' } : undefined}
+              >
+                <dd className="t-title-2" style={{ color: 'hsl(var(--foreground))' }}>{s.value}</dd>
+                <dt className="t-caption" style={{ marginTop: 4 }}>{s.label}</dt>
+              </div>
+            ))}
+          </motion.dl>
+
+          <motion.div
+            {...rise(0.44)}
+            className="hero-status flex flex-wrap items-center justify-center gap-x-5 gap-y-2 t-caption"
+          >
+            <span className="inline-flex items-center gap-2">
+              <span
+                className="animate-soft-pulse"
+                style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--tint-accent-text)' }}
+              />
+              {t.intro?.status?.openToWork ?? 'Open to work'}
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <MapPin size={13} />
+              {t.intro?.status?.location ?? 'Montreal, QC'}
+            </span>
           </motion.div>
 
-        </motion.div>
+        </div>
       </div>
     </section>
   );

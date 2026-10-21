@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { useLanguage } from '@/components/LanguageProvider';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
-import { gradientText, accentLine } from '@/styles/shared';
 
 const CallToAction = () => {
   const { translations: t } = useLanguage();
@@ -16,38 +15,39 @@ const CallToAction = () => {
   const tagline  = t.cta?.tagline  ?? t?.home?.tagline ?? "Can't build it, can't understand it.";
 
   return (
-    <section className="relative py-14 md:py-20 px-4">
-      <div className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse 60% 50% at 50% 50%, hsl(204 82% 58% / 0.05) 0%, transparent 70%)' }} />
+    <section
+      className="relative px-6"
+      style={{
+        paddingTop: 'clamp(72px, 10vw, 128px)',
+        paddingBottom: 'clamp(72px, 10vw, 128px)',
+        borderTop: '1px solid var(--hairline)',
+      }}
+    >
+      <div
+        className="absolute inset-0 pointer-events-none"
+        aria-hidden="true"
+        style={{ background: 'radial-gradient(ellipse 60% 50% at 50% 50%, hsl(204 82% 58% / 0.06) 0%, transparent 70%)' }}
+      />
 
-      <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}
-        className="container mx-auto max-w-2xl relative z-10">
-        <div className="glass rounded-2xl p-8 md:p-12 text-center flex flex-col items-center gap-6">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.65, ease: [0.32, 0.72, 0, 1] }}
+        className="container mx-auto max-w-2xl relative z-10 text-center flex flex-col items-center"
+      >
+        <h2 className="t-title-1">{heading}</h2>
 
-          <h2 style={{ ...gradientText, fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: 300, letterSpacing: '-0.025em', lineHeight: 1.2 }}>
-            {heading}
-          </h2>
+        <p className="t-lead" style={{ marginTop: 16, maxWidth: '30rem' }}>{sub}</p>
 
-          <p style={{ color: 'hsl(210, 12%, 52%)', fontSize: '1rem', lineHeight: 1.7, maxWidth: 420 }}>
-            {sub}
-          </p>
+        <button onClick={() => navigate('/contact')} className="btn btn-primary" style={{ marginTop: 32 }}>
+          {btnLabel}
+          <ArrowRight size={16} className="btn-arrow" />
+        </button>
 
-          <div style={accentLine} />
-
-          {/* Slim button */}
-          <button
-            onClick={() => navigate('/contact')}
-            className="group inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-medium transition-all duration-200 hover:gap-3"
-            style={{ background: 'rgba(100,160,255,0.10)', border: '1px solid rgba(100,160,255,0.20)', color: 'hsl(204 82% 70%)' }}
-          >
-            {btnLabel}
-            <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
-          </button>
-
-          <p style={{ fontSize: 12, fontStyle: 'italic', color: 'hsl(210, 12%, 42%)', marginTop: -8 }}>
-            {tagline}
-          </p>
-        </div>
+        <p className="t-caption" style={{ marginTop: 28, fontStyle: 'italic', opacity: 0.75 }}>
+          {tagline}
+        </p>
       </motion.div>
     </section>
   );

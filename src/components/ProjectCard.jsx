@@ -1,73 +1,74 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
-import { useTheme } from '@/components/ThemeProvider';
-import { cn } from '@/lib/utils';
 
+// La carte entiere est le lien. Avant, seule une pastille de 36px dans
+// le coin menait au projet : la cible etait sous le minimum tactile et
+// invisible comme affordance tant qu-on ne la survolait pas.
 const ProjectCard = ({ project }) => {
-  const { theme } = useTheme();
-  const isDark = theme === 'dark';
-
   return (
-    <motion.article
-      whileHover={{ y: -6 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 22 }}
-      className={cn(
-        'group relative flex flex-col rounded-2xl overflow-hidden border transition-all duration-300 h-full',
-        isDark ? 'bg-[#13151b] border-white/[0.07] hover:border-white/[0.14]' : 'bg-white border-black/[0.08] hover:border-black/[0.16] shadow-sm hover:shadow-md'
-      )}
+    <a
+      href={project.link}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="card card-hover group relative flex flex-col overflow-hidden h-full"
+      aria-label={`${project.title} — ${project.tag ?? ''}`}
     >
-      <div className="aspect-video relative overflow-hidden flex-shrink-0">
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent z-10" />
-        <motion.img
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.5, ease: 'easeOut' }}
-          className="w-full h-full object-cover"
+      <div className="relative overflow-hidden flex-shrink-0" style={{ aspectRatio: '16 / 10' }}>
+        <img
+          className="w-full h-full object-cover card-shot"
           src={project.imageSrc}
-          alt={project.imageAlt}
+          alt=""
+          loading="lazy"
+          decoding="async"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/8 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 z-20" />
+        {/* Un voile tres leger en bas de l-image : il fait tenir la
+            pastille et separe l-image du texte sans l-assombrir. */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: 'linear-gradient(to top, rgba(8,10,14,0.38) 0%, rgba(8,10,14,0.04) 42%, transparent 70%)' }}
+        />
 
-        {/* Tag posé directement sur la card, taille fixe, ne fait jamais
-            grandir le layout. max-w + truncate en filet de sécurité si un
-            tag est un jour plus long que prévu : jamais de débordement,
-            jamais de retour à la ligne qui casse la pastille. Le détail
-            complet des technologies reste accessible au survol via title. */}
+        {/* Taille fixe, jamais de retour a la ligne : la pastille ne fait
+            pas grandir la carte. Le detail des technologies reste au survol
+            via title. */}
         {project.tag && (
           <span
             title={project.technologies?.join(', ')}
-            className="absolute top-3 left-3 z-30 max-w-[80%] truncate whitespace-nowrap rounded-full px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-md"
-            style={{ background: 'rgba(10,12,16,0.55)', border: '1px solid rgba(255,255,255,0.15)' }}
+            className="absolute top-3 left-3 max-w-[80%] truncate whitespace-nowrap"
+            style={{
+              borderRadius: 'var(--r-pill)',
+              padding: '5px 11px',
+              fontSize: 'var(--fs-eyebrow)',
+              fontWeight: 500,
+              color: '#fff',
+              background: 'rgba(10,12,16,0.58)',
+              border: '1px solid rgba(255,255,255,0.16)',
+              backdropFilter: 'blur(12px) saturate(160%)',
+              WebkitBackdropFilter: 'blur(12px) saturate(160%)',
+            }}
           >
             {project.tag}
           </span>
         )}
       </div>
 
-      <div className="flex flex-col flex-grow p-5 md:p-6 gap-3">
+      <div className="flex flex-col flex-grow gap-2" style={{ padding: '20px 20px 22px' }}>
         <div className="flex items-start justify-between gap-3">
-          <div className="space-y-1.5">
-            <h3 className="text-xl font-semibold tracking-tight text-foreground group-hover:text-primary transition-colors duration-200">
-              {project.title}
-            </h3>
-            <div className="h-px w-10 group-hover:w-16 transition-all duration-300" style={{ background: 'linear-gradient(90deg, hsl(204,82%,58%), hsl(168,50%,56%))' }} />
-          </div>
-          <a
-            href={project.link} target="_blank" rel="noopener noreferrer"
-            className="flex-shrink-0 flex items-center justify-center w-9 h-9 rounded-xl text-white shadow hover:scale-110 transition-all duration-200"
-            style={{ background: 'linear-gradient(135deg, hsl(204,82%,52%), hsl(168,50%,48%))' }}
-            aria-label={`Visit ${project.title}`}
+          <h3 className="t-title-3 card-title">{project.title}</h3>
+          <span
+            aria-hidden="true"
+            className="flex items-center justify-center shrink-0"
+            style={{ width: 28, height: 28 }}
           >
-            <ArrowUpRight style={{ width: 15, height: 15 }} />
-          </a>
+            <ArrowUpRight size={17} className="card-arrow" />
+          </span>
         </div>
-        <p className="text-sm leading-relaxed flex-grow line-clamp-4 text-muted-foreground">
+
+        <p className="card-copy flex-grow">
           {project.description}
         </p>
       </div>
-
-      <div className="absolute bottom-0 left-0 right-0 h-px scale-x-0 group-hover:scale-x-100 transition-transform duration-500" style={{ background: 'linear-gradient(90deg, hsl(204,82%,58%), hsl(168,50%,56%))' }} />
-    </motion.article>
+    </a>
   );
 };
 

@@ -1,49 +1,31 @@
-// Styles partagés — une seule source de vérité pour tout le site
+// Styles partages — une seule source de verite pour tout le site.
+//
+// Ce module exportait des OBJETS passes a style={{ }}. Il exporte
+// maintenant des NOMS DE CLASSE definis dans src/index.css.
+//
+// Pourquoi : un style inline gagne contre toute regle de feuille de
+// style, donc il echappe au theme. Une surface ecrite
+// rgba(255,255,255,0.03) est juste en sombre et invisible en clair, et
+// aucune regle ne peut la rattraper. En CSS, la meme surface est un
+// token qui change avec le theme.
+//
+// Tout ce qui reste ici est une VALEUR, pas une decoration : le degrade
+// de marque, utilise la ou une classe ne suffit pas (un masque SVG, un
+// canvas, un favicon).
 
-export const GRADIENT = 'linear-gradient(135deg, hsl(204, 82%, 62%) 0%, hsl(204, 82%, 50%) 45%, hsl(168, 50%, 56%) 100%)';
+export const GRADIENT =
+  'linear-gradient(135deg, hsl(204 82% 62%) 0%, hsl(204 82% 52%) 44%, hsl(168 50% 54%) 100%)';
 
-export const gradientText = {
-  background: GRADIENT,
-  WebkitBackgroundClip: 'text',
-  backgroundClip: 'text',
-  WebkitTextFillColor: 'transparent',
-  color: 'transparent',
-};
+// Surtitre : la pastille en capitales au-dessus d-un titre de section.
+export const eyebrow = 'eyebrow';
 
-export const sectionTitle = {
-  ...gradientText,
-  fontSize: 'clamp(1.5rem, 3.2vw, 2.4rem)',
-  fontWeight: 300,
-  letterSpacing: '-0.03em',
-  lineHeight: 1.15,
-};
+// Titre de section. Pleine couleur, pas en degrade : la hierarchie se
+// lit a la taille et a la graisse, et la couleur de marque est gardee
+// pour ce qui se clique.
+export const sectionTitle = 't-title-1';
 
-export const badge = {
-  display: 'inline-flex',
-  alignItems: 'center',
-  gap: 6,
-  padding: '6px 12px',
-  borderRadius: 999,
-  background: 'hsl(204, 82%, 58%, 0.08)',
-  border: '1px solid hsl(204, 82%, 58%, 0.20)',
-  fontSize: 11,
-  fontWeight: 600,
-  letterSpacing: '0.12em',
-  textTransform: 'uppercase',
-  color: 'hsl(204, 82%, 62%)',
-};
+// Sous-titre d-une section.
+export const subtitle = 't-lead';
 
-export const subtitleStyle = {
-  color: 'hsl(210, 12%, 52%)',
-  fontSize: 'clamp(0.9rem, 2vw, 1.05rem)',
-  lineHeight: 1.7,
-  maxWidth: 560,
-};
-
-export const accentLine = {
-  height: 1,
-  width: 40,
-  background: GRADIENT,
-  borderRadius: 999,
-  margin: '0 auto',
-};
+// Le degrade sur un mot — jamais sur un titre entier.
+export const gradientWord = 't-gradient';

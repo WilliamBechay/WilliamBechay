@@ -2,9 +2,34 @@
 <html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>William Béchay</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <title>William Béchay — Software Engineer</title>
+    <meta
+      name="description"
+      content="Full-stack software engineer building fast, scalable and reliable web and mobile products."
+    />
+
+    <!-- L-ancien lien pointait vers /vite.svg, absent de public/ : chaque
+         visite demandait une icone qui repondait 404 et l-onglet affichait
+         le glyphe par defaut du navigateur. -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+
+    <!-- La barre d-adresse mobile prend la couleur de la barre de nav,
+         par theme, pour que la page ne commence pas sur une coupure. -->
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fcfdfe" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#13151c" />
+    <meta name="color-scheme" content="dark light" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="William Béchay — Software Engineer" />
+    <meta
+      property="og:description"
+      content="Full-stack software engineer building fast, scalable and reliable web and mobile products."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

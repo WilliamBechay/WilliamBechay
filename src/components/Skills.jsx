@@ -2,32 +2,22 @@ import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/components/LanguageProvider';
-import { ArrowRight } from 'lucide-react';
-import { gradientText, sectionTitle, badge, subtitleStyle, accentLine } from '@/styles/shared';
+import { ArrowRight, Cpu } from 'lucide-react';
+import SectionHead from '@/components/SectionHead';
 
-// Un seul parent piloté par viewport (containerVariants) au lieu d'un
-// whileInView + spring individuel par icône : ça évite de déclencher
-// 15-20 IntersectionObserver + animations physiques simultanément, qui
-// est ce qui causait le lag à l'apparition. Le stagger est géré ici,
-// avec un simple tween (moins coûteux qu'un spring) sur chaque enfant.
-// La grille est TOUJOURS visible (pas de toggle) : un AnimatePresence
-// conditionnel avait été testé mais réintroduisait du montage/démontage
-// coûteux à chaque clic — retiré pour rester sur ce pattern optimisé.
+// Un seul parent pilote par viewport (containerVariants) au lieu d-un
+// whileInView + spring individuel par icone : ca evite de declencher
+// 15-20 IntersectionObserver + animations physiques simultanees, qui
+// est ce qui causait le lag a l-apparition. Le stagger est gere ici,
+// avec un simple tween (moins couteux qu-un spring) sur chaque enfant.
 const containerVariants = {
   hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.03, delayChildren: 0.05 },
-  },
+  visible: { transition: { staggerChildren: 0.025, delayChildren: 0.05 } },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 14, scale: 0.9 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { duration: 0.35, ease: 'easeOut' },
-  },
+  hidden: { opacity: 0, y: 12 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: [0.32, 0.72, 0, 1] } },
 };
 
 const Skills = () => {
@@ -37,60 +27,57 @@ const Skills = () => {
   if (!t?.skills) return null;
 
   return (
-    <section id="skills" className="relative py-14 md:py-20 px-4">
+    <section
+      id="skills"
+      className="relative px-6"
+      style={{
+        paddingTop: 'clamp(72px, 10vw, 128px)',
+        paddingBottom: 'clamp(72px, 10vw, 128px)',
+        borderTop: '1px solid var(--hairline)',
+      }}
+    >
       <div className="container mx-auto relative z-10">
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}
-          className="text-center mb-10 md:mb-14 flex flex-col items-center gap-4">
-          <div style={badge}>
-            <span style={{ fontSize: 10 }}>⚙</span>
-            {t.skills.badge ?? 'Technical Expertise'}
-          </div>
-          <h2 style={sectionTitle}>{t.skills.heading}</h2>
-          <p style={subtitleStyle}>{t.skills.subheading}</p>
-          <div style={accentLine} />
-        </motion.div>
+        <SectionHead
+          eyebrow={t.skills.badge ?? 'Technical Expertise'}
+          icon={<Cpu size={12} />}
+          title={t.skills.heading}
+          subtitle={t.skills.subheading}
+        />
 
-        <motion.div
+        <motion.ul
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
+          viewport={{ once: true, amount: 0.15 }}
           variants={containerVariants}
-          className="flex flex-wrap justify-center gap-6 md:gap-10 lg:gap-14 mb-10 md:mb-14"
+          className="flex flex-wrap justify-center"
+          style={{ marginTop: 'clamp(40px, 5vw, 64px)', gap: 'clamp(14px, 1.8vw, 20px)' }}
         >
           {skills.map((skill) => (
-            <motion.div
-              key={skill.name}
-              variants={itemVariants}
-              whileHover={{ y: -10, scale: 1.08, transition: { type: 'spring', stiffness: 400, damping: 12 } }}
-              className="flex flex-col items-center gap-2 cursor-pointer group"
-            >
-              <div className="relative glass rounded-2xl p-3 md:p-4">
-                <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl"
-                  style={{ background: 'linear-gradient(135deg, hsl(204,82%,58%/0.20), hsl(168,50%,56%/0.20))' }} />
-                <img
-                  src={`https://skillicons.dev/icons?i=${skill.icon}&theme=dark`}
-                  alt={skill.name}
-                  width={56}
-                  height={56}
-                  loading="lazy"
-                  decoding="async"
-                  className="w-12 h-12 md:w-14 md:h-14 relative z-10"
-                />
-              </div>
-              <span className="text-xs font-medium text-muted-foreground group-hover:text-foreground transition-colors text-center">{skill.name}</span>
-            </motion.div>
+            <motion.li key={skill.name} variants={itemVariants} className="skill-chip tile">
+              <img
+                src={`https://skillicons.dev/icons?i=${skill.icon}&theme=dark`}
+                alt=""
+                width={48}
+                height={48}
+                loading="lazy"
+                decoding="async"
+              />
+              <span>{skill.name}</span>
+            </motion.li>
           ))}
-        </motion.div>
+        </motion.ul>
 
-        {/* Slim button */}
-        <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.3 }} className="text-center">
-          <button
-            onClick={() => navigate('/contact')}
-            className="group inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-medium transition-all duration-200 hover:gap-3"
-            style={{ background: 'rgba(100,160,255,0.10)', border: '1px solid rgba(100,160,255,0.20)', color: 'hsl(204 82% 70%)' }}
-          >
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2, ease: [0.32, 0.72, 0, 1] }}
+          className="flex justify-center"
+          style={{ marginTop: 'clamp(40px, 5vw, 56px)' }}
+        >
+          <button onClick={() => navigate('/contact')} className="btn btn-secondary">
             {t.skills.contactButton}
-            <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
+            <ArrowRight size={16} className="btn-arrow" />
           </button>
         </motion.div>
       </div>
