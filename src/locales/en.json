@@ -152,7 +152,9 @@
       "subject": "Subject",
       "message": "Message",
       "date": "Date",
-      "noMessages": "No messages yet."
+      "noMessages": "No messages yet.",
+      "reason": "Reason",
+      "loading": "Loading messages..."
     }
   }
 }

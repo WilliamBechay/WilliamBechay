@@ -25,7 +25,7 @@ const IntroSection = () => {
   ];
 
   return (
-    <section className="hero-section relative flex items-center px-6">
+    <section className="min-screen relative flex items-center px-6">
       <div className="container mx-auto max-w-3xl relative z-10">
         <div className="text-center flex flex-col items-center">
 

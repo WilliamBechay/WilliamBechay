@@ -152,7 +152,9 @@
       "subject": "Sujet",
       "message": "Message",
       "date": "Date",
-      "noMessages": "Aucun message pour le moment."
+      "noMessages": "Aucun message pour le moment.",
+      "reason": "Raison",
+      "loading": "Chargement des messages..."
     }
   }
 }

@@ -249,7 +249,10 @@ html {
    statut passait sous la ligne de flottaison — la premiere chose que
    voit un visiteur etait une page deja coupee.
    ============================================================ */
-.hero-section {
+/* 100svh est la hauteur "petite" du viewport : sur un telephone, celle
+   qui reste quand la barre d-adresse est deployee. Le repli en vh est
+   la premiere declaration — un navigateur qui ignore svh garde celle-la. */
+.min-screen {
   min-height: calc(100vh - var(--nav-h));
   min-height: calc(100svh - var(--nav-h));
   padding-top: clamp(28px, 5vw, 56px);
@@ -483,6 +486,68 @@ html {
 
 .footer-link { color: inherit; transition: color var(--dur-fast) var(--ease); }
 .footer-link:hover { color: hsl(var(--primary)); }
+
+/* ============================================================
+   TABLEAU (page Admin)
+   ============================================================ */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: var(--fs-callout);
+}
+
+.admin-table th {
+  padding: 13px 20px;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--hairline);
+  font-size: var(--fs-caption);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: hsl(var(--foreground));
+  white-space: nowrap;
+}
+
+.admin-table td {
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--hairline);
+  color: hsl(var(--muted-foreground));
+  vertical-align: top;
+}
+
+.admin-table tbody tr:last-child td { border-bottom: 0; }
+.admin-table tbody tr { transition: background-color var(--dur-fast) var(--ease); }
+.admin-table tbody tr:hover { background: var(--surface-2); }
+
+.admin-strong { color: hsl(var(--foreground)); font-weight: 500; }
+.admin-nowrap { white-space: nowrap; }
+
+.admin-message {
+  max-width: 22rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-empty {
+  text-align: center;
+  padding: 56px 20px;
+  color: hsl(var(--muted-foreground));
+}
+
+/* Le sujet n-est pas une categorie : une pastille neutre, pour ne pas
+   lui donner la couleur de marque que porte la raison du message. */
+.admin-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 11px;
+  border-radius: var(--r-pill);
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+  color: hsl(var(--muted-foreground));
+  font-size: var(--fs-eyebrow);
+  line-height: 1;
+}
 
 /* ============================================================
    CHAMPS

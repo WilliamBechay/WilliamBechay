@@ -3,15 +3,14 @@ import { Helmet } from 'react-helmet';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/components/LanguageProvider';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/lib/customSupabaseClient';
-import { LogOut } from 'lucide-react';
+import { LogOut, Lock, Inbox } from 'lucide-react';
 
 const SESSION_STORAGE_KEY = 'admin_session_token';
 
 const Admin = () => {
-  const { translations } = useLanguage();
+  const { translations, language } = useLanguage();
   const { toast } = useToast();
   const [token, setToken] = useState(() => sessionStorage.getItem(SESSION_STORAGE_KEY) || null);
   const [password, setPassword] = useState('');
@@ -36,7 +35,7 @@ const Admin = () => {
     });
 
     if (error || data?.error) {
-      // Session invalide ou expirée -> on déconnecte proprement.
+      // Session invalide ou expiree -> on deconnecte proprement.
       if (error?.context?.status === 401 || data?.error) {
         handleLogout();
       }
@@ -85,6 +84,8 @@ const Admin = () => {
 
   if (!translations) return null;
 
+  const d = translations.admin.dashboard;
+
   if (!isAuthenticated) {
     return (
       <>
@@ -92,58 +93,77 @@ const Admin = () => {
           <title>{translations.admin.meta.title}</title>
           <meta name="description" content={translations.admin.meta.description} />
         </Helmet>
-        <div className="container mx-auto px-4 py-16 sm:py-24 flex items-center justify-center min-h-[calc(100vh-8rem)]">
+        {/* La hauteur plein ecran vient d-une classe : en JS, les deux
+            declarations min-height (vh en repli, svh ensuite) seraient
+            deux cles identiques dans un meme objet, donc une seule
+            survivrait — et ce serait le repli qui disparaitrait. */}
+        <div className="min-screen flex items-center justify-center px-6">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="max-w-md w-full"
+            transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
+            className="card w-full"
+            style={{ maxWidth: 400, padding: 'clamp(24px, 4vw, 36px)' }}
           >
-            <div className="bg-secondary/50 p-8 rounded-xl shadow-lg">
-              <h1 className="text-3xl font-bold text-center mb-2 text-primary">
+            <div className="flex flex-col items-center text-center">
+              <span className="eyebrow">
+                <Lock size={12} />
                 {translations.admin.login.title}
-              </h1>
-              <p className="text-muted-foreground text-center mb-8">
+              </span>
+              <p className="t-lead" style={{ marginTop: 16 }}>
                 {translations.admin.login.subtitle}
               </p>
-              <form onSubmit={handleLogin} className="space-y-6">
-                <div className="space-y-2">
-                  <label htmlFor="password" className="text-sm font-medium text-foreground">
-                    {translations.admin.login.password}
-                  </label>
-                  <Input
-                    id="password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder={translations.admin.login.passwordPlaceholder}
-                    required
-                    className="bg-background border-border"
-                  />
-                </div>
-                <Button type="submit" className="w-full" size="lg" disabled={isVerifying}>
-                  {isVerifying ? translations.admin.login.verifying : translations.admin.login.submit}
-                </Button>
-              </form>
             </div>
+
+            <form onSubmit={handleLogin} style={{ marginTop: 26 }}>
+              <label htmlFor="password" className="field-label">
+                {translations.admin.login.password}
+              </label>
+              <Input
+                id="password"
+                type="password"
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder={translations.admin.login.passwordPlaceholder}
+                required
+              />
+              <button type="submit" className="btn btn-primary w-full" style={{ marginTop: 20 }} disabled={isVerifying}>
+                {isVerifying ? translations.admin.login.verifying : translations.admin.login.submit}
+              </button>
+            </form>
           </motion.div>
         </div>
       </>
     );
   }
-  
+
   const getReasonLabel = (reasonKey) => {
     const reasonTranslations = translations?.contact?.form?.reason;
     if (!reasonTranslations) return reasonKey;
-    
+
     const reasons = {
       project: reasonTranslations.project,
       bug: reasonTranslations.bug,
       collaboration: reasonTranslations.collaboration,
-      general: reasonTranslations.general
+      general: reasonTranslations.general,
     };
     return reasons[reasonKey] || reasonKey;
-  }
+  };
+
+  // La date suit la langue de l-interface, pas celle du navigateur : la
+  // page bascule en francais et la colonne restait au format anglais.
+  const formatDate = (value) =>
+    new Date(value).toLocaleDateString(language === 'fr' ? 'fr-CA' : 'en-CA', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    });
+
+  const columns = [d.name, d.email, d.reason, d.subject, d.message, d.date];
+
+  const emptyRow = loading ? d.loading : d.noMessages;
+  const isEmpty = loading || messages.length === 0;
 
   return (
     <>
@@ -151,73 +171,99 @@ const Admin = () => {
         <title>{translations.admin.meta.title}</title>
         <meta name="description" content={translations.admin.meta.description} />
       </Helmet>
-      <div className="container mx-auto px-4 py-16 sm:py-24">
+
+      <div className="container mx-auto px-6" style={{ paddingTop: 'clamp(40px, 6vw, 72px)', paddingBottom: 'clamp(56px, 8vw, 96px)' }}>
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
         >
-          <div className="flex justify-between items-center mb-8">
+          <div className="flex flex-wrap items-end justify-between gap-4" style={{ marginBottom: 'clamp(24px, 3.5vw, 40px)' }}>
             <div>
-              <h1 className="text-4xl sm:text-5xl font-bold text-primary">
-                {translations.admin.dashboard.title}
-              </h1>
-              <p className="text-lg text-muted-foreground mt-2">
-                {translations.admin.dashboard.subtitle}
-              </p>
+              <h1 className="t-title-1">{d.title}</h1>
+              <p className="t-lead" style={{ marginTop: 10 }}>{d.subtitle}</p>
             </div>
-            <Button variant="outline" onClick={handleLogout}>
-              <LogOut className="w-4 h-4 mr-2" />
-              {translations.admin.dashboard.logout}
-            </Button>
+            <button onClick={handleLogout} className="btn btn-secondary btn-sm">
+              <LogOut size={15} />
+              {d.logout}
+            </button>
           </div>
-          
-          <div className="bg-secondary/30 rounded-lg overflow-hidden shadow-md">
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm text-left">
-                <thead className="bg-secondary/50">
+
+          {/* Vue large : le tableau. */}
+          <div className="card hidden md:block" style={{ overflow: 'hidden' }}>
+            <div style={{ overflowX: 'auto' }}>
+              <table className="admin-table">
+                <thead>
                   <tr>
-                    <th className="px-6 py-3 font-medium text-foreground">{translations.admin.dashboard.name}</th>
-                    <th className="px-6 py-3 font-medium text-foreground">{translations.admin.dashboard.email}</th>
-                    <th className="px-6 py-3 font-medium text-foreground">{translations.admin.dashboard.reason}</th>
-                    <th className="px-6 py-3 font-medium text-foreground">{translations.admin.dashboard.subject}</th>
-                    <th className="px-6 py-3 font-medium text-foreground">{translations.admin.dashboard.message}</th>
-                    <th className="px-6 py-3 font-medium text-foreground">{translations.admin.dashboard.date}</th>
+                    {columns.map((label) => <th key={label}>{label}</th>)}
                   </tr>
                 </thead>
                 <tbody>
-                  <AnimatePresence>
-                    {loading ? (
-                      <tr>
-                        <td colSpan="6" className="text-center py-12 text-muted-foreground">Loading messages...</td>
+                  {isEmpty ? (
+                    <tr>
+                      <td colSpan={columns.length} className="admin-empty">{emptyRow}</td>
+                    </tr>
+                  ) : (
+                    messages.map((msg) => (
+                      <tr key={msg.id}>
+                        <td className="admin-strong">{msg.name}</td>
+                        <td>{msg.email}</td>
+                        <td>{getReasonLabel(msg.reason) || '-'}</td>
+                        <td>{msg.subject || '-'}</td>
+                        {/* Le message est tronque pour tenir dans la ligne ;
+                            l-attribut title rend le texte entier lisible au
+                            survol, et la vue en cartes le montre en entier. */}
+                        <td className="admin-message" title={msg.message}>{msg.message}</td>
+                        <td className="admin-nowrap">{formatDate(msg.created_at)}</td>
                       </tr>
-                    ) : messages.length === 0 ? (
-                      <tr>
-                        <td colSpan="6" className="text-center py-12 text-muted-foreground">{translations.admin.dashboard.noMessages}</td>
-                      </tr>
-                    ) : (
-                      messages.map((msg) => (
-                        <motion.tr
-                          key={msg.id}
-                          layout
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          className="border-b border-border/50 hover:bg-secondary/40 transition-colors"
-                        >
-                          <td className="px-6 py-4 font-medium text-foreground">{msg.name}</td>
-                          <td className="px-6 py-4 text-muted-foreground">{msg.email}</td>
-                          <td className="px-6 py-4 text-muted-foreground">{getReasonLabel(msg.reason) || '-'}</td>
-                          <td className="px-6 py-4 text-muted-foreground">{msg.subject || '-'}</td>
-                          <td className="px-6 py-4 text-muted-foreground max-w-xs truncate">{msg.message}</td>
-                          <td className="px-6 py-4 text-muted-foreground">{new Date(msg.created_at).toLocaleDateString()}</td>
-                        </motion.tr>
-                      ))
-                    )}
-                  </AnimatePresence>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
+          </div>
+
+          {/* Vue etroite : une carte par message. Un tableau de six colonnes
+              dans un conteneur a defilement horizontal se lit au doigt en
+              poussant la page de cote — sur un telephone, le message lui-meme,
+              qui est la seule raison d-ouvrir cette page, restait hors champ. */}
+          <div className="md:hidden flex flex-col gap-3">
+            {isEmpty ? (
+              <div className="card flex flex-col items-center text-center" style={{ padding: 32 }}>
+                <Inbox size={20} style={{ color: 'hsl(var(--muted-foreground))' }} />
+                <p className="t-caption" style={{ marginTop: 10 }}>{emptyRow}</p>
+              </div>
+            ) : (
+              <AnimatePresence initial={false}>
+                {messages.map((msg) => (
+                  <motion.article
+                    key={msg.id}
+                    layout
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="card"
+                    style={{ padding: 18 }}
+                  >
+                    <div className="flex items-baseline justify-between gap-3">
+                      <h2 className="t-title-3">{msg.name}</h2>
+                      <span className="t-caption admin-nowrap">{formatDate(msg.created_at)}</span>
+                    </div>
+
+                    <a href={`mailto:${msg.email}`} className="footer-link t-caption" style={{ display: 'inline-block', marginTop: 2 }}>
+                      {msg.email}
+                    </a>
+
+                    <div className="flex flex-wrap gap-2" style={{ marginTop: 12 }}>
+                      {msg.reason && <span className="eyebrow">{getReasonLabel(msg.reason)}</span>}
+                      {msg.subject && <span className="admin-chip">{msg.subject}</span>}
+                    </div>
+
+                    <p className="card-copy" style={{ marginTop: 12 }}>{msg.message}</p>
+                  </motion.article>
+                ))}
+              </AnimatePresence>
+            )}
           </div>
         </motion.div>
       </div>
