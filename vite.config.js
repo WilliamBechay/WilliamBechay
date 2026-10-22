@@ -167,7 +167,17 @@ if (window.navigation && window.self !== window.top) {
 const addTransformIndexHtml = {
 	name: 'add-transform-index-html',
 	transformIndexHtml(html) {
-		const tags = [
+		// Ces cinq scripts renvoient les erreurs a window.parent : ils ne
+		// servent que dans l-apercu en iframe de l-editeur. En production il
+		// n-y a pas de parent, et ils y partaient quand meme — notamment un
+		// MutationObserver pose sur document.documentElement en subtree, donc
+		// rappele a CHAQUE mutation du DOM. React au montage et framer-motion
+		// pendant une animation en produisent en continu, et c-est exactement
+		// le moment ou la page doit peindre. S-y ajoutaient un correctif de
+		// window.fetch traversant tous les appels Supabase et un detournement
+		// de console.error. Rien de tout cela n-a de destinataire sur le site
+		// en ligne : ils ne sont plus injectes qu-en developpement.
+		const tags = isDev ? [
 			{
 				tag: 'script',
 				attrs: { type: 'module' },
@@ -198,7 +208,7 @@ const addTransformIndexHtml = {
 				children: configNavigationHandler,
 				injectTo: 'head',
 			},
-		];
+		] : [];
 
 		if (!isDev && process.env.TEMPLATE_BANNER_SCRIPT_URL && process.env.TEMPLATE_REDIRECT_URL) {
 			tags.push(

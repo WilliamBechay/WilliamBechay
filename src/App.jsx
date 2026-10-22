@@ -1,15 +1,19 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Home from '@/pages/Home';
-import Contact from '@/pages/Contact.jsx';
-import Admin from '@/pages/Admin';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { LanguageProvider } from '@/components/LanguageProvider';
 import { Toaster } from '@/components/ui/toaster';
-import { SupabaseAuthProvider } from '@/contexts/SupabaseAuthContext';
+
+// Contact et Admin sont les deux seules pages qui parlent a Supabase, et
+// Contact est la seule qui a besoin du Select de Radix. Chargees a la demande,
+// elles sortent du bundle initial : la page d-accueil n-attend plus le code de
+// pages que le visiteur n-a pas ouvertes.
+const Contact = lazy(() => import('@/pages/Contact.jsx'));
+const Admin = lazy(() => import('@/pages/Admin'));
 
 const AppContent = () => {
   return (
@@ -29,11 +33,15 @@ const AppContent = () => {
           recopiee : deux endroits qui doivent valoir la meme chose doivent
           lire la meme valeur, sinon ils divergent au premier ajustement. */}
       <main className="flex-grow overflow-x-hidden relative" style={{ paddingTop: 'var(--nav-h)' }}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/admin" element={<Admin />} />
-        </Routes>
+        {/* Le repli garde la hauteur de l-ecran au lieu de laisser la page se
+            replier sur elle-meme pendant le chargement d-une route. */}
+        <Suspense fallback={<div className="min-screen" aria-hidden="true" />}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/admin" element={<Admin />} />
+          </Routes>
+        </Suspense>
       </main>
       <Footer />
       <Toaster />
@@ -50,9 +58,7 @@ function App() {
     <MotionConfig reducedMotion="user">
       <ThemeProvider defaultTheme="dark">
         <LanguageProvider>
-          <SupabaseAuthProvider>
-            <AppContent />
-          </SupabaseAuthProvider>
+          <AppContent />
         </LanguageProvider>
       </ThemeProvider>
     </MotionConfig>

@@ -4,10 +4,15 @@ import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/components/LanguageProvider';
 import { ArrowDown, MapPin } from 'lucide-react';
 
-const rise = (delay) => ({
-  initial: { opacity: 0, y: 16 },
+// Les six blocs du hero arrivaient en cascade sur 1,04s (0,44s de retard
+// cumule + 0,6s d-animation). Apres un ecran vide, cela se lisait comme des
+// elements qui clignotent un par un plutot que comme une entree. Le pas est
+// reduit a 0,04s et la duree a 0,4s : tout est pose en 0,6s, et le mouvement
+// se lit comme un seul geste.
+const rise = (step) => ({
+  initial: { opacity: 0, y: 10 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6, delay, ease: [0.32, 0.72, 0, 1] },
+  transition: { duration: 0.4, delay: step * 0.04, ease: [0.32, 0.72, 0, 1] },
 });
 
 const IntroSection = () => {
@@ -29,7 +34,7 @@ const IntroSection = () => {
       <div className="container mx-auto max-w-3xl relative z-10">
         <div className="text-center flex flex-col items-center">
 
-          <motion.div {...rise(0.05)}>
+          <motion.div {...rise(0)}>
             <span className="eyebrow">
               <span
                 className="animate-soft-pulse"
@@ -42,17 +47,17 @@ const IntroSection = () => {
           {/* Le degrade de marque tient sur UN mot. Un titre entier en
               degrade perd sa hierarchie : il n-a plus ni noir ni blanc a
               opposer au texte qui le suit. */}
-          <motion.h1 {...rise(0.12)} className="t-display hero-title">
+          <motion.h1 {...rise(1)} className="t-display hero-title">
             {t.intro?.headingLine1 ?? 'Building Digital'}
             <br />
             <span className="t-gradient">{t.intro?.headingLine2 ?? 'Experiences'}</span>
           </motion.h1>
 
-          <motion.p {...rise(0.2)} className="t-lead hero-lead">
+          <motion.p {...rise(2)} className="t-lead hero-lead">
             {t.home.intro.greeting}
           </motion.p>
 
-          <motion.div {...rise(0.28)} className="hero-actions flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+          <motion.div {...rise(3)} className="hero-actions flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
             <button onClick={scrollToProjects} className="btn btn-primary w-full sm:w-auto">
               {t.intro?.scrollCta ?? 'View my projects'}
               <ArrowDown size={16} className="btn-arrow btn-arrow-down" />
@@ -66,7 +71,7 @@ const IntroSection = () => {
               pastilles. Le chiffre est une donnee — il se lit en pleine
               couleur, a sa taille, sans decor. */}
           <motion.dl
-            {...rise(0.36)}
+            {...rise(4)}
             className="hero-stats grid grid-cols-3 w-full"
           >
             {stats.map((s, i) => (
@@ -82,7 +87,7 @@ const IntroSection = () => {
           </motion.dl>
 
           <motion.div
-            {...rise(0.44)}
+            {...rise(5)}
             className="hero-status flex flex-wrap items-center justify-center gap-x-5 gap-y-2 t-caption"
           >
             <span className="inline-flex items-center gap-2">
