@@ -1,12 +1,13 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { useLanguage } from '@/components/LanguageProvider';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
+import { useReveal } from '@/hooks/useReveal';
 
 const CallToAction = () => {
   const { translations: t } = useLanguage();
   const navigate = useNavigate();
+  const revealRef = useReveal();
   if (!t) return null;
 
   const heading  = t.cta?.heading  ?? "Let's Build Together";
@@ -29,12 +30,9 @@ const CallToAction = () => {
         style={{ background: 'radial-gradient(ellipse 60% 50% at 50% 50%, hsl(204 82% 58% / 0.06) 0%, transparent 70%)' }}
       />
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.3 }}
-        transition={{ duration: 0.65, ease: [0.32, 0.72, 0, 1] }}
-        className="container mx-auto max-w-2xl relative z-10 text-center flex flex-col items-center"
+      <div
+        ref={revealRef}
+        className="reveal container mx-auto max-w-2xl relative z-10 text-center flex flex-col items-center"
       >
         <h2 className="t-title-1">{heading}</h2>
 
@@ -48,7 +46,7 @@ const CallToAction = () => {
         <p className="t-caption" style={{ marginTop: 28, fontStyle: 'italic', opacity: 0.75 }}>
           {tagline}
         </p>
-      </motion.div>
+      </div>
     </section>
   );
 };

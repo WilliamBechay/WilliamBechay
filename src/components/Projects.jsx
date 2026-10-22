@@ -1,6 +1,6 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import ProjectCard from '@/components/ProjectCard';
+import { useReveal } from '@/hooks/useReveal';
 import SectionHead from '@/components/SectionHead';
 import { useLanguage } from '@/components/LanguageProvider';
 import { Sparkles } from 'lucide-react';
@@ -11,6 +11,7 @@ import docustratImage from '@/assets/Docustrat.png';
 
 const Projects = () => {
   const { translations: t } = useLanguage();
+  const revealRef = useReveal();
   if (!t?.projects) return null;
 
   // Un seul tag court par projet (categorie + plateforme), affiche en
@@ -56,16 +57,18 @@ const Projects = () => {
           style={{ marginTop: 'clamp(40px, 5vw, 64px)', gap: 'clamp(20px, 2.2vw, 28px)' }}
         >
           {projects.map((project, index) => (
-            <motion.div
+            // L-echelonnement passe par une proprietes CSS lue par
+            // animation-delay, et non par un delai JavaScript : pendant un
+            // delai, framer maintenait l-element a sa valeur d-arrivee
+            // avant de le renvoyer a son depart, ce qui se voyait.
+            <div
               key={project.id}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.15 }}
-              transition={{ duration: 0.55, delay: index * 0.07, ease: [0.32, 0.72, 0, 1] }}
-              className="h-full"
+              ref={revealRef}
+              className="reveal h-full"
+              style={{ '--reveal-delay': `${index * 70}ms` }}
             >
               <ProjectCard project={project} />
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

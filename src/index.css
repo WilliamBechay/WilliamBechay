@@ -622,10 +622,40 @@ html {
 .animate-fade-in-up { animation: fade-in-up var(--dur-slow) var(--ease) both; }
 .animate-soft-pulse { animation: soft-pulse 2.4s ease-in-out infinite; }
 
+/* ============================================================
+   REVELATION
+   L-etat cache est pose par la FEUILLE DE STYLE, pas par JavaScript
+   apres coup : il s-applique des la premiere resolution du style, donc
+   il n-existe aucune image ou l-element est peint visible avant de
+   disparaitre. C-est tout le defaut que ce bloc remplace.
+
+   Il est conditionne a .js, ajoute par le script inline de index.html.
+   Sans JavaScript, rien ne viendrait jamais ajouter .is-in et le
+   contenu resterait invisible pour toujours ; sans la classe, il
+   s-affiche simplement sans effet.
+   ============================================================ */
+@keyframes reveal-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.js .reveal { opacity: 0; }
+.js .reveal.is-in {
+  animation: reveal-in var(--dur-slow) var(--ease) both;
+  animation-delay: var(--reveal-delay, 0ms);
+}
+
 /* Une preference systeme, pas une option : tout ce qui bouge sans
    qu-on le lui demande s-arrete ici. */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+
+  /* Pas de revelation : le contenu est la, tout de suite. La regle
+     generale ci-dessous ramenerait la duree a 0,01ms, ce qui reviendrait
+     au meme — mais seulement si l-animation demarre. Mettre l-opacite a 1
+     ne depend d-aucun declenchement. */
+  .js .reveal, .js .reveal.is-in { opacity: 1; animation: none; transform: none; }
+
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
