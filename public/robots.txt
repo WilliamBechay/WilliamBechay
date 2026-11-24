@@ -5,5 +5,3 @@ Allow: /
 # elle n'expose aucun contenu public et la faire decouvrir ne sert qu'a
 # attirer des tentatives de connexion.
 Disallow: /admin
-
-Sitemap: https://williambechay.com/sitemap.xml
