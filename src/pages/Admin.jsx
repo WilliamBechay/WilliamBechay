@@ -27,6 +27,15 @@ const Admin = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated]);
 
+  // Session refusee par le serveur : inutile de lui redemander de la
+  // revoquer, elle ne vaut deja plus rien.
+  const clearSession = () => {
+    sessionStorage.removeItem(SESSION_STORAGE_KEY);
+    setToken(null);
+    setPassword('');
+    setMessages([]);
+  };
+
   const fetchMessages = async () => {
     setLoading(true);
     const { data, error } = await supabase.functions.invoke('admin-messages', {
@@ -37,7 +46,7 @@ const Admin = () => {
     if (error || data?.error) {
       // Session invalide ou expiree -> on deconnecte proprement.
       if (error?.context?.status === 401 || data?.error) {
-        handleLogout();
+        clearSession();
       }
       toast({
         title: translations.contact.toast.error.title,
@@ -75,11 +84,23 @@ const Admin = () => {
     }
   };
 
-  const handleLogout = () => {
-    sessionStorage.removeItem(SESSION_STORAGE_KEY);
-    setToken(null);
-    setPassword('');
-    setMessages([]);
+  // Oublier le jeton cote navigateur ne l-invalidait pas : il restait
+  // utilisable en base pendant les 12h de sa duree de vie. On demande donc
+  // sa revocation au serveur, puis on nettoie l-ecran quoi qu-il arrive.
+  const handleLogout = async () => {
+    const current = token;
+    clearSession();
+    if (current) {
+      try {
+        await supabase.functions.invoke('admin-messages', {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${current}` },
+          body: { action: 'logout' },
+        });
+      } catch {
+        /* le jeton a deja quitte le navigateur et expirera de lui-meme */
+      }
+    }
   };
 
   if (!translations) return null;
@@ -92,6 +113,8 @@ const Admin = () => {
         <Helmet>
           <title>{translations.admin.meta.title}</title>
           <meta name="description" content={translations.admin.meta.description} />
+          {/* Une page d-administration n-a rien a gagner a etre indexee. */}
+          <meta name="robots" content="noindex, nofollow" />
         </Helmet>
         {/* La hauteur plein ecran vient d-une classe : en JS, les deux
             declarations min-height (vh en repli, svh ensuite) seraient
@@ -170,6 +193,8 @@ const Admin = () => {
       <Helmet>
         <title>{translations.admin.meta.title}</title>
         <meta name="description" content={translations.admin.meta.description} />
+        {/* Une page d-administration n-a rien a gagner a etre indexee. */}
+        <meta name="robots" content="noindex, nofollow" />
       </Helmet>
 
       <div className="container mx-auto px-6" style={{ paddingTop: 'clamp(40px, 6vw, 72px)', paddingBottom: 'clamp(56px, 8vw, 96px)' }}>

@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# La page d'administration n'a rien a faire dans un index de recherche :
+# elle n'expose aucun contenu public et la faire decouvrir ne sert qu'a
+# attirer des tentatives de connexion.
+Disallow: /admin
+
+Sitemap: https://williambechay.com/sitemap.xml
