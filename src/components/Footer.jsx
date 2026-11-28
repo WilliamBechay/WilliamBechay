@@ -28,17 +28,15 @@ const Footer = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            {socials.map((s) => (
-              <a
-                key={s.label}
-                href={s.href}
-                target={s.href.startsWith('http') ? '_blank' : '_self'}
-                rel="noopener noreferrer"
-                className="social-link"
-                aria-label={s.label}
-              >
+            {socials.map((s) => s.href.startsWith('http') ? (
+              <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" className="social-link" aria-label={s.label}>
                 <s.icon size={17} />
               </a>
+            ) : (
+              // Un <a href> interne rechargeait toute l-application.
+              <Link key={s.label} to={s.href} className="social-link" aria-label={s.label}>
+                <s.icon size={17} />
+              </Link>
             ))}
           </div>
 

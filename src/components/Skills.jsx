@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '@/components/LanguageProvider';
 import { ArrowRight, Cpu } from 'lucide-react';
 import SectionHead from '@/components/SectionHead';
@@ -11,7 +11,6 @@ import { useReveal } from '@/hooks/useReveal';
 // ecrivait sa valeur d-arrivee avant de repartir de son depart, ce qui se
 // voyait comme un clignotement par vignette.
 const Skills = () => {
-  const navigate = useNavigate();
   const { translations: t } = useLanguage();
   const skills = useMemo(() => t?.skills?.items || [], [t]);
   const revealRef = useReveal();
@@ -64,10 +63,10 @@ const Skills = () => {
           className="reveal flex justify-center"
           style={{ marginTop: 'clamp(40px, 5vw, 56px)' }}
         >
-          <button onClick={() => navigate('/contact')} className="btn btn-secondary">
+          <Link to="/contact" className="btn btn-secondary">
             {t.skills.contactButton}
             <ArrowRight size={16} className="btn-arrow" />
-          </button>
+          </Link>
         </div>
       </div>
     </section>

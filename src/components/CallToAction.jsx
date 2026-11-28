@@ -1,12 +1,11 @@
 import React from 'react';
 import { useLanguage } from '@/components/LanguageProvider';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { useReveal } from '@/hooks/useReveal';
 
 const CallToAction = () => {
   const { translations: t } = useLanguage();
-  const navigate = useNavigate();
   const revealRef = useReveal();
   if (!t) return null;
 
@@ -38,10 +37,10 @@ const CallToAction = () => {
 
         <p className="t-lead" style={{ marginTop: 16, maxWidth: '30rem' }}>{sub}</p>
 
-        <button onClick={() => navigate('/contact')} className="btn btn-primary" style={{ marginTop: 32 }}>
+        <Link to="/contact" className="btn btn-primary" style={{ marginTop: 32 }}>
           {btnLabel}
           <ArrowRight size={16} className="btn-arrow" />
-        </button>
+        </Link>
 
         <p className="t-caption" style={{ marginTop: 28, fontStyle: 'italic', opacity: 0.75 }}>
           {tagline}

@@ -7,6 +7,7 @@ import Home from '@/pages/Home';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { LanguageProvider } from '@/components/LanguageProvider';
 import { Toaster } from '@/components/ui/toaster';
+import ScrollToTop from '@/components/ScrollToTop';
 
 // Contact et Admin sont les deux seules pages qui parlent a Supabase, et
 // Contact est la seule qui a besoin du Select de Radix. Chargees a la demande,
@@ -14,6 +15,7 @@ import { Toaster } from '@/components/ui/toaster';
 // pages que le visiteur n-a pas ouvertes.
 const Contact = lazy(() => import('@/pages/Contact.jsx'));
 const Admin = lazy(() => import('@/pages/Admin'));
+const NotFound = lazy(() => import('@/pages/NotFound'));
 
 const AppContent = () => {
   return (
@@ -28,6 +30,7 @@ const AppContent = () => {
           style={{ background: 'radial-gradient(circle, hsl(168 50% 60%) 0%, transparent 70%)', animation: 'ce-orb2 20s ease-in-out infinite alternate' }} />
       </div>
 
+      <ScrollToTop />
       <Header />
       {/* La hauteur de la barre vient du token --nav-h, pas d-une utilitaire
           recopiee : deux endroits qui doivent valoir la meme chose doivent
@@ -40,6 +43,7 @@ const AppContent = () => {
             <Route path="/" element={<Home />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
       </main>

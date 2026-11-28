@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '@/components/LanguageProvider';
 import { ArrowDown, MapPin } from 'lucide-react';
 
@@ -17,7 +17,6 @@ const rise = (step) => ({
 
 const IntroSection = () => {
   const { translations: t } = useLanguage();
-  const navigate = useNavigate();
   if (!t?.home?.intro) return null;
 
   const scrollToProjects = () =>
@@ -62,9 +61,9 @@ const IntroSection = () => {
               {t.intro?.scrollCta ?? 'View my projects'}
               <ArrowDown size={16} className="btn-arrow btn-arrow-down" />
             </button>
-            <button onClick={() => navigate('/contact')} className="btn btn-secondary w-full sm:w-auto">
+            <Link to="/contact" className="btn btn-secondary w-full sm:w-auto">
               {t.header?.contact ?? 'Contact'}
-            </button>
+            </Link>
           </motion.div>
 
           {/* Chiffres : une rangee separee par des filets, pas trois
@@ -77,11 +76,11 @@ const IntroSection = () => {
             {stats.map((s, i) => (
               <div
                 key={s.label}
-                className="text-center px-2"
+                className="text-center px-2 flex flex-col-reverse"
                 style={i > 0 ? { borderLeft: '1px solid var(--hairline)' } : undefined}
               >
-                <dd className="t-title-2" style={{ color: 'hsl(var(--foreground))' }}>{s.value}</dd>
                 <dt className="t-caption" style={{ marginTop: 4 }}>{s.label}</dt>
+                <dd className="t-title-2" style={{ color: 'hsl(var(--foreground))' }}>{s.value}</dd>
               </div>
             ))}
           </motion.dl>

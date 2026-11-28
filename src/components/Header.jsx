@@ -27,12 +27,16 @@ const Header = () => {
   }, []);
 
   useEffect(() => {
-    if (isMenuOpen) document.body.style.overflow = 'hidden';
-    else document.body.style.overflow = '';
-    return () => { document.body.style.overflow = ''; };
+    if (!isMenuOpen) return undefined;
+    document.body.style.overflow = 'hidden';
+    // Echap referme le menu mobile, comme tout panneau qui couvre la page.
+    const onKey = (e) => { if (e.key === 'Escape') setIsMenuOpen(false); };
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', onKey);
+    };
   }, [isMenuOpen]);
-
-  const handleNavigate = (path) => { navigate(path); setIsMenuOpen(false); };
 
   const scrollToSection = (sectionId) => {
     if (location.pathname !== '/') {
@@ -66,6 +70,7 @@ const Header = () => {
     : undefined;
 
   if (!translations) return null;
+  const a11y = translations.header.a11y ?? {};
 
   return (
     <header
@@ -98,16 +103,16 @@ const Header = () => {
           <button onClick={() => scrollToSection('projects')} className={navItemClass('projects')} style={navItemStyle('projects')}>
             {translations.header.projects}
           </button>
-          <button onClick={() => handleNavigate('/contact')} className={navItemClass('/contact')} style={navItemStyle('/contact')}>
+          <Link to="/contact" className={navItemClass('/contact')} style={navItemStyle('/contact')} aria-current={isActive('/contact') ? 'page' : undefined}>
             {translations.header.contact}
-          </button>
+          </Link>
 
           <div className="w-px h-4 mx-2" style={{ background: 'var(--hairline-strong)' }} />
 
-          <button onClick={toggleLanguage} className="btn btn-ghost btn-sm hit" style={{ padding: 0, width: 38 }} aria-label="Toggle language">
+          <button onClick={toggleLanguage} className="btn btn-ghost btn-sm hit" style={{ padding: 0, width: 38 }} aria-label={a11y.language ?? 'Switch language'}>
             <Languages size={16} />
           </button>
-          <button onClick={handleToggleTheme} className="btn btn-ghost btn-sm hit" style={{ padding: 0, width: 38 }} aria-label="Toggle theme">
+          <button onClick={handleToggleTheme} className="btn btn-ghost btn-sm hit" style={{ padding: 0, width: 38 }} aria-label={isDark ? (a11y.themeLight ?? 'Switch to light theme') : (a11y.themeDark ?? 'Switch to dark theme')}>
             <AnimatePresence mode="wait" initial={false}>
               <motion.span
                 key={theme}
@@ -125,17 +130,17 @@ const Header = () => {
 
         {/* Commandes mobiles */}
         <div className="flex md:hidden items-center gap-0.5">
-          <button onClick={toggleLanguage} className="btn btn-ghost btn-sm hit" style={{ padding: 0, width: 40 }} aria-label="Toggle language">
+          <button onClick={toggleLanguage} className="btn btn-ghost btn-sm hit" style={{ padding: 0, width: 40 }} aria-label={a11y.language ?? 'Switch language'}>
             <Languages size={17} />
           </button>
-          <button onClick={handleToggleTheme} className="btn btn-ghost btn-sm hit" style={{ padding: 0, width: 40 }} aria-label="Toggle theme">
+          <button onClick={handleToggleTheme} className="btn btn-ghost btn-sm hit" style={{ padding: 0, width: 40 }} aria-label={isDark ? (a11y.themeLight ?? 'Switch to light theme') : (a11y.themeDark ?? 'Switch to dark theme')}>
             {isDark ? <Sun size={17} /> : <Moon size={17} />}
           </button>
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="btn btn-ghost btn-sm hit"
             style={{ padding: 0, width: 40 }}
-            aria-label="Toggle menu"
+            aria-label={isMenuOpen ? (a11y.menuClose ?? 'Close menu') : (a11y.menuOpen ?? 'Open menu')}
             aria-expanded={isMenuOpen}
           >
             {isMenuOpen ? <X size={17} /> : <Menu size={17} />}
@@ -159,9 +164,9 @@ const Header = () => {
               <button onClick={() => scrollToSection('projects')} className="btn btn-ghost" style={{ justifyContent: 'flex-start', ...navItemStyle('projects') }}>
                 {translations.header.projects}
               </button>
-              <button onClick={() => handleNavigate('/contact')} className="btn btn-ghost" style={{ justifyContent: 'flex-start', ...navItemStyle('/contact') }}>
+              <Link to="/contact" onClick={() => setIsMenuOpen(false)} className="btn btn-ghost" style={{ justifyContent: 'flex-start', ...navItemStyle('/contact') }} aria-current={isActive('/contact') ? 'page' : undefined}>
                 {translations.header.contact}
-              </button>
+              </Link>
             </div>
           </motion.div>
         )}

@@ -4,7 +4,14 @@
     "projects": "Projets",
     "skills": "Compétences",
     "contact": "Contact",
-    "admin": "Admin"
+    "admin": "Admin",
+    "a11y": {
+      "language": "Switch to English",
+      "themeLight": "Passer au thème clair",
+      "themeDark": "Passer au thème sombre",
+      "menuOpen": "Ouvrir le menu",
+      "menuClose": "Fermer le menu"
+    }
   },
   "hero": {
     "heading": "William Béchay",
@@ -141,7 +148,8 @@
       "passwordPlaceholder": "••••••••",
       "submit": "Se connecter",
       "verifying": "Vérification...",
-      "error": "Mot de passe incorrect. Veuillez réessayer."
+      "error": "Mot de passe incorrect. Veuillez réessayer.",
+      "failedTitle": "Échec de la connexion"
     },
     "dashboard": {
       "title": "Tableau de bord",
@@ -154,7 +162,14 @@
       "date": "Date",
       "noMessages": "Aucun message pour le moment.",
       "reason": "Raison",
-      "loading": "Chargement des messages..."
+      "loading": "Chargement des messages...",
+      "fetchError": "Impossible de charger les messages."
     }
+  },
+  "notFound": {
+    "metaTitle": "Page introuvable - William Béchay",
+    "title": "Cette page n’existe pas",
+    "subtitle": "Le lien est peut-être cassé, ou la page a été déplacée.",
+    "back": "Retour à l’accueil"
   }
 }

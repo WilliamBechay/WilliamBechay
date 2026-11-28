@@ -9,10 +9,16 @@ import { LogOut, Lock, Inbox } from 'lucide-react';
 
 const SESSION_STORAGE_KEY = 'admin_session_token';
 
+// Stockage bloque (navigation privee stricte) : la page doit quand meme
+// s-afficher, sans session memorisee.
+const readToken = () => {
+  try { return sessionStorage.getItem(SESSION_STORAGE_KEY) || null; } catch { return null; }
+};
+
 const Admin = () => {
   const { translations, language } = useLanguage();
   const { toast } = useToast();
-  const [token, setToken] = useState(() => sessionStorage.getItem(SESSION_STORAGE_KEY) || null);
+  const [token, setToken] = useState(readToken);
   const [password, setPassword] = useState('');
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -30,7 +36,7 @@ const Admin = () => {
   // Session refusee par le serveur : inutile de lui redemander de la
   // revoquer, elle ne vaut deja plus rien.
   const clearSession = () => {
-    sessionStorage.removeItem(SESSION_STORAGE_KEY);
+    try { sessionStorage.removeItem(SESSION_STORAGE_KEY); } catch { /* rien a effacer */ }
     setToken(null);
     setPassword('');
     setMessages([]);
@@ -50,7 +56,7 @@ const Admin = () => {
       }
       toast({
         title: translations.contact.toast.error.title,
-        description: 'Failed to fetch messages.',
+        description: translations.admin.dashboard.fetchError ?? 'Failed to fetch messages.',
         variant: 'destructive',
       });
       console.error('Error fetching messages:', error || data?.error);
@@ -72,13 +78,13 @@ const Admin = () => {
 
     if (error || !data?.success) {
       toast({
-        title: 'Authentication Failed',
+        title: translations.admin.login.failedTitle ?? 'Authentication failed',
         description: translations.admin.login.error,
         variant: 'destructive',
       });
       console.error('Login error:', error || data?.error);
     } else {
-      sessionStorage.setItem(SESSION_STORAGE_KEY, data.token);
+      try { sessionStorage.setItem(SESSION_STORAGE_KEY, data.token); } catch { /* session pour cet onglet seulement */ }
       setToken(data.token);
       setPassword('');
     }
